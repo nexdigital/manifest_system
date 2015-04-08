@@ -26,6 +26,7 @@ class Request extends MY_Controller {
 			default:
 				$data['list_dicount'] = ($this->session->userdata('user_type') == 'Admin') ? $this->discount->get_list(null,array('Approved','Rejected','Cancelled')) : $this->discount->get_list($this->session->userdata('user_id'),array('Approved','Rejected','Waiting Approval','Cancelled'));
 				$data['list_dicount_request'] = $this->discount->get_list(null,array('Waiting Approval'));
+				$data['title'] = 'Request Discount';
 				$this->set_layout('request/discount',$data);
 				break;
 		}

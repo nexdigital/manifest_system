@@ -7,7 +7,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="<?=site_url()?>">Manifest System</a>
+        <a class="navbar-brand" href="<?=site_url()?>">Manifest System <?php if(isset($title)) echo '- ' . $title; else echo '' ; ?></a>
     </div>
     <!-- /.navbar-header -->
 

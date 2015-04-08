@@ -29,7 +29,7 @@ class Report extends MY_Controller {
 			}
 		}
 		$data['list_file'] = $this->manifest_model->get_all_file();*/
-		$this->set_layout('report/snow_card');
+		$this->set_layout('report/snow_card',array('title' => 'Debit Note'));
 	}
 
 	function snow(){
@@ -458,6 +458,7 @@ class Report extends MY_Controller {
 				}
 			}
 		}
+		$snow['title'] = 'Debit Note '.$_GET['from'].' -> '.$_GET['to'].'';
 		$this->set_layout('report/snow_taiwan',$snow);
 	}
 
@@ -746,6 +747,7 @@ class Report extends MY_Controller {
 				);
 			}
 		}
+		$snow['title'] = 'Debit Note '.$_GET['from'].' -> '.$_GET['to'].'';
 		$this->set_layout('report/snow_vietnam',$snow);
 	}
 
@@ -1030,8 +1032,7 @@ class Report extends MY_Controller {
 				}
 			}
 		}
-
-
+		$snow['title'] = 'Debit Note '.$_GET['from'].' -> '.$_GET['to'].'';
 		$this->set_layout('report/snow_jakarta_taiwan',$snow);
 	}
 
@@ -1146,8 +1147,7 @@ class Report extends MY_Controller {
 				}
 			}
 		}
-
-
+		$snow['title'] = 'Debit Note '.$_GET['from'].' -> '.$_GET['to'].'';
 		$this->set_layout('report/snow_jakarta_vietnam',$snow);
 	}
 

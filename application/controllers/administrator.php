@@ -13,24 +13,25 @@ class Administrator extends MY_Controller {
 	}
 
 	function manage_user() {
-		$data = array('list_user' => $this->user_model->get_list());
+		$data = array('list_user' => $this->user_model->get_list(),'title' => 'Manage User');
 		$this->set_layout('administrator/manage_user',$data);
 	}
 
 	function manage_kurs() {
-		$data = array('kurs' => $this->tools->get_kurs());
+		$data = array('kurs' => $this->tools->get_kurs(),'title' => 'Manage Kurs');
 		$this->set_layout('administrator/manage_kurs',$data);
 	}
 
     function manage_partner(){
 
         $data['get_partner'] = $this->administrator_model->get_partner();
+        $data['title'] = 'Manage Partner';
        	$this->set_layout('administrator/manage_partner',$data);
 
     }
 
     function setting() {
-    	$this->set_layout('administrator/setting',array());
+    	$this->set_layout('administrator/setting',array('title' => 'Setting'));
     }
 
 

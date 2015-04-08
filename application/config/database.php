@@ -48,11 +48,17 @@
 $active_group = 'default';
 $active_record = TRUE;
 
-
+if($_SERVER['SERVER_NAME'] == 'localhost') {
+	$db['default']['hostname'] = 'localhost';
+	$db['default']['username'] = 'root';
+	$db['default']['password'] = '';
+	$db['default']['database'] = 'manifest_system';
+} else {
 	$db['default']['hostname'] = 'localhost';
 	$db['default']['username'] = 'nexg1757_dbuser';
 	$db['default']['password'] = 'gbhXr&cnEH]q';
 	$db['default']['database'] = 'nexg1757_manifest_system';
+}
 
 $db['default']['dbdriver'] = 'mysql';
 $db['default']['dbprefix'] = '';

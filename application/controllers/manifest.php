@@ -15,18 +15,19 @@ class Manifest extends MY_Controller {
 	function upload() {
 		if($this->session->userdata('login') != TRUE) redirect(base_url());
 		$data = array(
-			'partner_list' => $this->partner_model->get_partner_list()
+			'partner_list' 	=> $this->partner_model->get_partner_list(),
+			'title'		 	=> 'Upload Manifest'
 			);
 		$this->set_layout('manifest/upload',$data);
 	}
 
 	function verification() {
 		if(!isset($_GET['file_id'])) {
-			$this->set_layout('manifest/verification_list');
+			$this->set_layout('manifest/verification_list',array('title' => 'Verification Manifest'));
 		} else {
 			$file_id = $_GET['file_id'];
 			$where = array('D.file_id' => $file_id);
-			$data = array('file' => $this->manifest_model->get_by_file_id($file_id), 'list_data' => $this->manifest_model->get_filtering_data(null,null,$where));
+			$data = array('file' => $this->manifest_model->get_by_file_id($file_id), 'list_data' => $this->manifest_model->get_filtering_data(null,null,$where),'title' => 'Verification Manifest');
 			$this->set_layout('manifest/verification_file',$data);			
 		}
 	}
@@ -43,12 +44,12 @@ class Manifest extends MY_Controller {
 	function data() {
 		if($this->session->userdata('login') != TRUE) redirect(base_url());
 
-		$data = array('list_file' => $this->manifest_model->get_file(), 'list_shipper' => $this->customers_model->get_list('shipper'), 'list_consignee' => $this->customers_model->get_list('consignee'));
+		$data = array('title' => 'Data Manifest', 'list_file' => $this->manifest_model->get_file(), 'list_shipper' => $this->customers_model->get_list('shipper'), 'list_consignee' => $this->customers_model->get_list('consignee'));
 		$this->set_layout('manifest/data',$data);
 	}
 
 	function download(){
-		$this->set_layout('manifest/download');
+		$this->set_layout('manifest/download',array('title' => 'Download Manifest'));
 	}
 
 	function payment($method = false){
@@ -183,7 +184,7 @@ class Manifest extends MY_Controller {
 										if(in_array(trim($value), $header_format)) {
 											$header[trim($value)] = $key;
 										} else {
-											$error_header[] = $key .' => '.$value;
+											$error_header[] = $value;
 										}
 									}
 								}
@@ -248,8 +249,9 @@ class Manifest extends MY_Controller {
 									$this->system->set_activity('Import Manifest #'.$file['mawb_no']);
 									$redirect = site_url('manifest/verification?file_id=' . $file['file_id']);
 								} else {
+									$error_header = implode('   |   ', $error_header);
 									$status = 'error';
-									$message = 'Format header incorrect, please check below </br>'.json_encode($error_header);
+									$message = json_encode('Format header incorrect, please check below <br>'.$error_header);
 								}
 								unlink(PATH_ATTACH . $file_data['file_name']);
 							} else {
@@ -561,6 +563,7 @@ class Manifest extends MY_Controller {
          
       $data['get_surabaya_import'] = $get_surabaya_import;
       $data['get_surabaya_export'] = $get_surabaya_export;
+      $data['title'] = 'Data Surabaya';
       $this->set_layout('manifest/surabaya',$data);
     }
 

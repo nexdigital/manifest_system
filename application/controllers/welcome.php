@@ -29,7 +29,7 @@ class Welcome extends MY_Controller {
 		$this->db->where('user_id !=','0');
 		$this->db->order_by('date','desc');
 		$logs = $this->db->get('all_activity_log');
-		$this->set_layout('report/access_logs',array('access_logs' => $logs->result()));
+		$this->set_layout('report/access_logs',array('access_logs' => $logs->result(), 'title' => 'Access Logs'));
 	}
 
 	function login(){

@@ -283,17 +283,15 @@ $(document).ready(function(){
         beforeSubmit: function() {
             $.colorbox({
                 inline:true,
-                href:$('#upload_progress_modal')
+                href:$('#upload_progress_modal'),
+                overlayClose:false,
+                closeButton:true
             })
         },
         dataType: 'json',
         success: function(data) {
             if(data.status == 'error') {
                 $('.progress-message').html(data.message);
-                setTimeout(function(){
-                    $.colorbox.close();
-                    $('.progress-message').html('');
-                }, 2000);
             } else {
                 $('#form_upload_manifest').resetForm();
                 $('.progress-message').html('Upload Finished . . .');

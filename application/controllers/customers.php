@@ -14,6 +14,7 @@ Class Customers extends MY_Controller {
 
 		$dataResult = $this->customers_model->get_data();
 		$data['dataResult'] = $dataResult;
+		$data['title'] = 'Customer Data';
 		$this->set_layout('customers/data',$data);
 	}
 	
@@ -23,6 +24,7 @@ Class Customers extends MY_Controller {
 		if($this->session->userdata('login') != TRUE) redirect(base_url());
 		$refcust = $this->customers_model->customer_new_id();
 		$array['refcust'] = $refcust;
+		$array['title'] = 'Add Customer';
 		$this->set_layout('customers/customer_input',$array);
 	}
 
