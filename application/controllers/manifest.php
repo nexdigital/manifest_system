@@ -241,7 +241,7 @@ class Manifest extends MY_Controller {
 												$mapping[$no]['mawb_type']			= (str_ireplace(' ','_',strtolower($value[$header['mawb_type']]))) ? str_ireplace(' ','_',strtolower($value[$header['mawb_type']])) : 'ftz';
 												$mapping[$no]['rand_data_id']		= $rand_data_id;
 												$mapping[$no]['deadline']			= $this->tools->deadline('+'.$this->tools->get_deadline_days());
-												if($mapping[$no]['hawb_no']) $this->manifest_model->data_insert_new($mapping[$no]);
+												if($mapping[$no]['hawb_no'] && $mapping[$no]['shipper'] && $mapping[$no]['consignee']) $this->manifest_model->data_insert_new($mapping[$no]);
 											}
 											$no++;
 										}

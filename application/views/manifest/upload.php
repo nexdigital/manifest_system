@@ -258,6 +258,26 @@ $(document).ready(function(){
     $('#form_upload_manifest, #form_upload_manifest_other').resetForm();
     $('select.form-control, .upload_type, .flight_from, .flight_to').select2();
 	
+    $('.text-pkg, .text-kg, text-rate').blur(function(){
+        var pkg = $('input.text-pkg').val();
+        var kg = $('input.text-kg').val();
+        var rate = $('input.text-rate').val();
+
+        var type = $('select#select-payment').val();
+
+        $.post('<?=base_url()?>manifest/formula/subtotal',{'pkg':pkg,'kg':kg,'rate':rate},function(data){
+            if(type == 'prepaid') {
+                $('.text-prepaid-, .text-prepaid').val(data);
+                $('.text-collect-, text-collect').val('');
+            } else if(type == 'collect') {
+                $('.text-prepaid-, text-prepaid').val('');
+                $('.text-collect-, text-collect').val(data);
+            } else {
+                $('.text-collect-, text-collect').val('');
+                $('.text-prepaid-, text-prepaid').val('');
+            }
+        })
+    })
     $('select#select-payment').change(function(){
     	var pkg = $('input.text-pkg').val();
     	var kg = $('input.text-kg').val();
