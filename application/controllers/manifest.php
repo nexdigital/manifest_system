@@ -194,7 +194,10 @@ class Manifest extends MY_Controller {
 									$this->manifest_model->file_insert_new($file);
 									$no = 1;
 									foreach ($sheetData as $key => $value) {
-											if(($value[$header['shipper']] && $value[$header['consignee']]) || (in_array($header['shipper'].$key, $merge_cell) && in_array($header['consignee'].$key, $merge_cell))) {
+											$value_row = ($value[$header['shipper']] && $value[$header['consignee']]) ? true : false; 
+											$value_row_header = (in_array($header['shipper'].$key, $merge_cell) && in_array($header['consignee'].$key, $merge_cell)) ? true : false;
+
+											if($value_row & $value_row_header) {
 											$new_data_id = 'THS' . date('ymdhis') . $this->manifest_model->data_new_id();
 											$rand_data_id = str_shuffle($new_data_id.time());
 
