@@ -12,12 +12,24 @@
     <div class="col-lg-12">
         <div class="col-lg-12">
             <div class="form-group">
-                <label>Type</label>
-                <select class="form-control" id="type" multiple="multiple">
-                    <option value="import">Import</option>
-                    <option value="export">Export</option>
-                    <option value="other">Other</option>
-                </select>
+                <label>Type Manifest</label>
+                <div class="checkbox" style="padding:0px;">
+                    <div class="checkbox" style="float:left; margin-right:50px; margin-top:-5px;">
+                        <label>
+                          <input type="checkbox" class="checkbox" name="type[]" value="import"> Import
+                        </label>
+                    </div>
+                    <div class="checkbox" style="float:left; margin-right:50px">
+                        <label>
+                          <input type="checkbox" class="checkbox" name="type[]" value="export"> Export
+                        </label>
+                    </div>
+                    <div class="checkbox" style="float:left; margin-right:50px">
+                        <label>
+                          <input type="checkbox" class="checkbox" name="type[]" value="other"> Other
+                        </label>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="col-lg-12">
@@ -51,7 +63,12 @@ $(document).ready(function(){
     $('select.form-control').select2();
 
     $('#download-excel').click(function(){
-        $.post('<?=base_url()?>download/manifest/excel',{'type':$('select#type').select2('val'),'start_date':$('#start-date').val(),'end_date':$('#end-date').val()},function(url){
+        var type_arr = [];
+        $('input.checkbox').each(function(){
+            type_arr.push($(this).val());
+        })
+
+        $.post('<?=base_url()?>download/manifest/excel',{'type':type_arr,'start_date':$('#start-date').val(),'end_date':$('#end-date').val()},function(url){
             window.open(url,'_blank');
         })
     })
