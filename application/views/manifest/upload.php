@@ -116,19 +116,31 @@
                     </div>
                     <div class="col-lg-12" style="padding:0px;">
 	                    <div class="col-lg-6" style="padding:0px;">
-	                        <div class="col-sm-4">
+	                        <div class="col-sm-2">
 	                            <div class="form-group">
 	                                <label>Pkg</label>
 	                                <input class="form-control text-pkg" type="text" name="pkg" required>
 	                            </div>
 	                        </div>
-	                        <div class="col-sm-4">
+                            <div class="col-sm-2">
+                                <div class="form-group">
+                                    <label>Pcs</label>
+                                    <input class="form-control text-pcs" type="text" name="pcs" required>
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <div class="form-group">
+                                    <label>Value</label>
+                                    <input class="form-control text-value" type="text" name="value" required>
+                                </div>
+                            </div>
+	                        <div class="col-sm-3">
 	                            <div class="form-group">
 	                                <label>KG</label>
 	                                <input class="form-control text-kg" type="text" name="kg" required>
 	                            </div>
 	                        </div>
-	                        <div class="col-sm-4">
+	                        <div class="col-sm-3">
 	                            <div class="form-group">
 	                                <label>Rate</label>
 	                                <input class="form-control text-rate" type="text" name="rate" required>
@@ -229,6 +241,7 @@
 <div id="select_customer_modal" class="colorbox-modal colorbox-style" style="width:100%;">
     <div class="colorbox-header">
         <span class="customer-type"></span>
+        <div class="pull-right"><a href="javascript:;" onCLick="$.colorbox.close();"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a></div>
     </div>
     <div class="colorbox-body">
         <form id="search-customer">
@@ -324,9 +337,21 @@ $(document).ready(function(){
     
     $('#form_upload_manifest_single').validate();
     $('#form_upload_manifest_single').ajaxForm({
-        success:function(){
-            alert('Data Saved');
-            location.reload();
+        dataType:'json',
+        success:function(data){
+            if(data.status == 'success') {
+                $.alertbeck({
+                  title: 'Upload Manifest!',
+                  content: 'Upload data success'
+                });
+                $('#form_upload_manifest_single').resetForm();
+                $('.selected-shipper-text, .selected-consignee-text').html('');
+            } else {
+                $.alertbeck({
+                  title: 'Upload Manifest Failed!',
+                  content: data.message
+                });
+            }
         }
     });
 
@@ -344,6 +369,9 @@ $(document).ready(function(){
     })
 
     $('button.select-customer').click(function(){
+        $('.result-search-customer').html('');
+        $('.text-search-customer').html('');
+
         var type = $(this).attr('data_type');
         $('.type-search-customer').val(type);
         $('.search-customer').val('');

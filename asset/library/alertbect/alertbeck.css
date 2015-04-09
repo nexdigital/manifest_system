@@ -1,0 +1,88 @@
+#alertbeck_overlay {
+    position: fixed;
+    background-color: #000;
+    z-index: 99;
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    left: 0px;
+    z-index: 9999;
+    opacity: 0.8;
+}
+
+#alertbeck_box {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -150px;
+    margin-left: -275px;
+    width: 550px;
+    background-color: #ffffff;
+    border:1px solid #ccc;
+    font-size: 12px;
+    font-family: Tahoma;
+    border:1px solid #ccc;
+    display: none;
+    z-index: 99999;
+}
+
+#alertbeck_box .alertbeck_title {
+    height: 40px;
+    line-height: 40px;
+    padding: 0px 10px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #ffffff;
+    background: #ff3019;
+    background: -moz-linear-gradient(top,  #ff3019 0%, #cf0404 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ff3019), color-stop(100%,#cf0404));
+    background: -webkit-linear-gradient(top,  #ff3019 0%,#cf0404 100%);
+    background: -o-linear-gradient(top,  #ff3019 0%,#cf0404 100%);
+    background: -ms-linear-gradient(top,  #ff3019 0%,#cf0404 100%);
+    background: linear-gradient(to bottom,  #ff3019 0%,#cf0404 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff3019', endColorstr='#cf0404',GradientType=0 );
+}
+#alertbeck_box .alertbeck_content {
+    padding: 10px;
+    line-height: 25px;
+    min-height: 40px;
+}
+#alertbeck_box .alertbeck_footer {
+    height: 40px;
+    line-height: 40px;
+    padding: 0px 10px;
+    font-size: 14px;
+    border-top: 1px solid #ccc;
+    background: #eeeeee;
+    background: -moz-linear-gradient(top,  #eeeeee 0%, #cccccc 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#eeeeee), color-stop(100%,#cccccc));
+    background: -webkit-linear-gradient(top,  #eeeeee 0%,#cccccc 100%);
+    background: -o-linear-gradient(top,  #eeeeee 0%,#cccccc 100%);
+    background: -ms-linear-gradient(top,  #eeeeee 0%,#cccccc 100%);
+    background: linear-gradient(to bottom,  #eeeeee 0%,#cccccc 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eeeeee', endColorstr='#cccccc',GradientType=0 );
+}
+#alertbeck_box .alertbeck_footer .alertbeck_btngroup {
+    float: right;
+}
+#alertbeck_box .alertbeck_footer .alertbeck_btngroup a {
+    line-height: 20px;
+    padding: 3px 7px;
+    display: inline-block;
+    min-width: 70px;
+    text-align: center;
+    font-size: 12px;
+    font-weight: bold;
+    text-decoration: none;
+    margin-top: 7px;
+}
+#alertbeck_box .alertbeck_footer .alertbeck_btngroup a.true {
+    background-color: #5c75a9;
+    border-top: 1px solid #8a9cc2;
+    color: #ffffff;
+}
+#alertbeck_box .alertbeck_footer .alertbeck_btngroup a.false {
+    background-color: #f9f9f9;
+    border:1px solid #ccc;
+    color: #000;
+}

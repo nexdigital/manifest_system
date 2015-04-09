@@ -44,7 +44,7 @@
 
     <script src="<?=base_url()?>asset/javascript/resizing.js" type="text/javascript"></script>
 
-    
+    <link rel="stylesheet" href="<?=base_url() ?>asset/library/alertbect/alertbeck.css">
+    <script type="text/javascript" src="<?=base_url()?>asset/library/alertbect/alertbeck.js"></script>   
 </head>
-
 <body>

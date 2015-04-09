@@ -271,34 +271,42 @@ class Manifest extends MY_Controller {
 		case 'insert':
 			$rand_data_id = str_shuffle(time());
 
-			$mapping['file_id'] 		= $new_data_id = 'THS' . date('ymdhis') . $this->manifest_model->data_new_id();;
-			$mapping['data_no'] 		= NULL;
-			$mapping['hawb_no'] 		= $_POST['hawb_no'];
-			$mapping['shipper'] 		= $_POST['shipper'];
-			$mapping['consignee'] 		= $_POST['consignee'];
-			$mapping['pkg'] 			= $_POST['pkg'];
-			$mapping['description'] 	= $_POST['description'];
-			$mapping['pcs'] 			= $_POST['pcs'];
-			$mapping['kg']				= $this->tools->rounded($_POST['kg']);
-			$mapping['value'] 			= $_POST['value'];
-			$mapping['prepaid']			= $_POST['prepaid'];
-			$mapping['collect']			= $_POST['collect'];
-			$mapping['rate']			= $_POST['rate'];
-			$mapping['remarks'] 		= $_POST['remarks'];
-			$mapping['status']			= 'VALID';
-			$mapping['nt_kurs']			= $this->tools->get_nt_kurs();
-			$mapping['created_date']	= date('Y-m-d h:i:s');
-			$mapping['last_update']		= date('Y-m-d h:i:s');
-			$mapping['user_id']			= $this->session->userdata('user_id');
-			$mapping['status_payment']		= NULL;
-			$mapping['status_delivery']		= NULL;
-			$mapping['other_charge_tata']	= $_POST['other_charge_tata'];
-			$mapping['other_charge_pml']	= $_POST['other_charge_pml'];
-			$mapping['mawb_type']			= NULL;
-			$mapping['rand_data_id']		= $rand_data_id;
-			$mapping['manifest_type']		= $_POST['manifest_type'];
-			$this->manifest_model->data_insert_new($mapping);
-			$this->system->set_activity('Insert Single Data #'.$mapping['hawb_no']);
+			$status_shipper = ($_POST['shipper']) ? true : false;
+			$status_consignee = ($_POST['consignee']) ? true : false;
+
+			if($status_shipper && $status_consignee) {
+				$mapping['file_id'] 		= $new_data_id = 'THS' . date('ymdhis') . $this->manifest_model->data_new_id();;
+				$mapping['data_no'] 		= NULL;
+				$mapping['hawb_no'] 		= $_POST['hawb_no'];
+				$mapping['shipper'] 		= $_POST['shipper'];
+				$mapping['consignee'] 		= $_POST['consignee'];
+				$mapping['pkg'] 			= $_POST['pkg'];
+				$mapping['description'] 	= $_POST['description'];
+				$mapping['pcs'] 			= $_POST['pcs'];
+				$mapping['kg']				= $this->tools->rounded($_POST['kg']);
+				$mapping['value'] 			= $_POST['value'];
+				$mapping['prepaid']			= $_POST['prepaid'];
+				$mapping['collect']			= $_POST['collect'];
+				$mapping['rate']			= $_POST['rate'];
+				$mapping['remarks'] 		= $_POST['remarks'];
+				$mapping['status']			= 'VALID';
+				$mapping['nt_kurs']			= $this->tools->get_nt_kurs();
+				$mapping['created_date']	= date('Y-m-d h:i:s');
+				$mapping['last_update']		= date('Y-m-d h:i:s');
+				$mapping['user_id']			= $this->session->userdata('user_id');
+				$mapping['status_payment']		= NULL;
+				$mapping['status_delivery']		= NULL;
+				$mapping['other_charge_tata']	= $_POST['other_charge_tata'];
+				$mapping['other_charge_pml']	= $_POST['other_charge_pml'];
+				$mapping['mawb_type']			= NULL;
+				$mapping['rand_data_id']		= $rand_data_id;
+				$mapping['manifest_type']		= $_POST['manifest_type'];
+				$this->manifest_model->data_insert_new($mapping);
+				$this->system->set_activity('Insert Single Data #'.$mapping['hawb_no']);
+				echo json_encode(array('status' => 'success'));
+			} else {
+				echo json_encode(array('status' => 'failed', 'message' => 'Please complete the shipper and consignee'));
+			}
 			break;
 		case 'update':
 			$data_id = $_POST['data_id'];
