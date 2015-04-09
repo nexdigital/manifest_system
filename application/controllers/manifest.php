@@ -26,7 +26,7 @@ class Manifest extends MY_Controller {
 			$this->set_layout('manifest/verification_list',array('title' => 'Verification Manifest'));
 		} else {
 			$file_id = $_GET['file_id'];
-			$where = array('D.file_id' => $file_id,'D.shipper !=' => '', 'D.consigneesa !=' => '');
+			$where = array('D.file_id' => $file_id, 'D.shipper !=' => '\'\'', 'D.consignee !=' => '\'\'');
 			$data = array('file' => $this->manifest_model->get_by_file_id($file_id), 'list_data' => $this->manifest_model->get_filtering_data(null,null,$where),'title' => 'Verification Manifest');
 			$this->set_layout('manifest/verification_file',$data);			
 		}

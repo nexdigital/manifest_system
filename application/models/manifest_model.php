@@ -108,6 +108,7 @@ class Manifest_model extends CI_Model {
 	}
 
 	function get_filtering_data($start = null,$limit = null,$where,$group_by = false) {
+		print_r($where);
 		foreach ($where as $key => $value) { 
 			if(is_array($value)) $this->db->where_in($key,$value); else $this->db->where($key,$value); 
 		}
