@@ -189,15 +189,13 @@ class Manifest extends MY_Controller {
 									}
 								}
 								unset($sheetData[1]);
-
+								unset($sheetData[count($sheetData)-1]);
 								if(count($header_format) == count($header)) {
 									$this->manifest_model->file_insert_new($file);
 									$no = 1;
 									foreach ($sheetData as $key => $value) {
-											$value_row = ($value[$header['shipper']] && $value[$header['consignee']]) ? true : false; 
-											$value_row_header = (in_array($header['shipper'].$key, $merge_cell) && in_array($header['consignee'].$key, $merge_cell)) ? true : false;
 
-											if($value_row & $value_row_header) {
+											if($value[$header['shipper']] && $value[$header['consignee']]) {
 											$new_data_id = 'THS' . date('ymdhis') . $this->manifest_model->data_new_id();
 											$rand_data_id = str_shuffle($new_data_id.time());
 
