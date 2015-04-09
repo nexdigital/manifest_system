@@ -88,8 +88,8 @@ class Manifest extends MY_Controller {
 						$return[$index]['data_id'] 				= $value->data_id;
 						$return[$index]['data_no'] 				= $value->data_no;
 						$return[$index]['hawb_no'] 				= $value->hawb_no;
-						$return[$index]['shipper'] 				= $this->customers_model->get_by_id($value->shipper)->name;
-						$return[$index]['consignee'] 			= $this->customers_model->get_by_id($value->consignee)->name;
+						$return[$index]['shipper'] 				= ($value->shipper) ? $this->customers_model->get_by_id($value->shipper)->name : '';
+						$return[$index]['consignee'] 			= ($value->consignee) ? $this->customers_model->get_by_id($value->consignee)->name : '';
 						$return[$index]['pkg'] 					= $value->pkg;
 						$return[$index]['description'] 			= $value->description;
 						$return[$index]['pcs'] 					= $value->pcs;
