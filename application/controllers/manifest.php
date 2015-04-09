@@ -189,13 +189,12 @@ class Manifest extends MY_Controller {
 									}
 								}
 								unset($sheetData[1]);
-								unset($sheetData[count($sheetData)-1]);
 								if(count($header_format) == count($header)) {
 									$this->manifest_model->file_insert_new($file);
 									$no = 1;
 									foreach ($sheetData as $key => $value) {
 
-											if($value[$header['hawb_no']] || in_array($header['hawb_no'].$key, $merge_cell)) {
+										if($value[$header['hawb_no']] || in_array($header['hawb_no'].$key, $merge_cell)) {
 											$new_data_id = 'THS' . date('ymdhis') . $this->manifest_model->data_new_id();
 											$rand_data_id = str_shuffle($new_data_id.time());
 
@@ -242,7 +241,7 @@ class Manifest extends MY_Controller {
 												$mapping[$no]['mawb_type']			= (str_ireplace(' ','_',strtolower($value[$header['mawb_type']]))) ? str_ireplace(' ','_',strtolower($value[$header['mawb_type']])) : 'ftz';
 												$mapping[$no]['rand_data_id']		= $rand_data_id;
 												$mapping[$no]['deadline']			= $this->tools->deadline('+'.$this->tools->get_deadline_days());
-												$this->manifest_model->data_insert_new($mapping[$no]);
+												if($mapping[$no]['hawb_no']) $this->manifest_model->data_insert_new($mapping[$no]);
 											}
 											$no++;
 										}
