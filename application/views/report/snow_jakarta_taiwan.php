@@ -119,9 +119,14 @@ $(document).ready(function(){
                 acu_refund: $(this).find('.acu_refund').html()
             });
         })
-        $.post('<?=base_url()?>download/excel',{'snow':'jakarta_taiwan','data':data},function(url){
-            window.open(url,'_blank');
-        });
+    
+        if(data.length  == 0) {
+            alert('You no have data to print');
+        } else {
+            $.post('<?=base_url()?>download/excel',{'snow':'jakarta_taiwan','data':data},function(url){
+                window.open(url,'_blank');
+            });
+        }
     })
 
     $('#add_row').click(function(){
