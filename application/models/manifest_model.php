@@ -39,6 +39,8 @@ class Manifest_model extends CI_Model {
 		$this->db->select('M.*,U.username');
 		$this->db->join('user_table U','U.user_id = M.user_id');
 		$this->db->where('M.file_id',$file_id);
+		$this->db->where('M.shipper !=','');
+		$this->db->where('M.consignee !=','');
 		$get = $this->db->get('manifest_file_table M');
 		if($get->num_rows() > 0) return $get->row();
 		else return false;
@@ -113,8 +115,6 @@ class Manifest_model extends CI_Model {
 		}
 		if(is_numeric($start)) $this->db->limit($limit,$start);
 		if($group_by != false) $this->db->group_by($group_by);
-		$this->db->where('shipper !=','');
-		$this->db->where('consignee !=','');
 		$get = $this->db->get('manifest_data_table D');
 
 		if($get->num_rows() > 0) return $get->result();
