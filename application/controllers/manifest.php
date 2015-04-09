@@ -179,10 +179,10 @@ class Manifest extends MY_Controller {
 								$header = array();
 								$error_header = array();
 								foreach ($sheetData[1] as $key => $value) {
-									$value = strtolower(trim(str_ireplace(' ', '_', trim($value))));
-									if(strlen($value) > 0) {
-										if(in_array(trim($value), $header_format)) {
-											$header[trim($value)] = $key;
+									$value_trim = strtolower(trim(str_ireplace(' ', '_', trim($value))));
+									if(strlen($value_trim) > 0) {
+										if(in_array(trim($value_trim), $header_format)) {
+											$header[trim($value_trim)] = $key;
 										} else {
 											$error_header[] = $value;
 										}
@@ -241,22 +241,28 @@ class Manifest extends MY_Controller {
 												$mapping[$no]['mawb_type']			= (str_ireplace(' ','_',strtolower($value[$header['mawb_type']]))) ? str_ireplace(' ','_',strtolower($value[$header['mawb_type']])) : 'ftz';
 												$mapping[$no]['rand_data_id']		= $rand_data_id;
 												$mapping[$no]['deadline']			= $this->tools->deadline('+'.$this->tools->get_deadline_days());
-												if($mapping[$no]['hawb_no'] && $mapping[$no]['shipper'] && $mapping[$no]['consignee']) $this->manifest_model->data_insert_new($mapping[$no]);
+												if($mapping[$no]['hawb_no'] && $mapping[$no]['shipper'] && $mapping[$no]['consignee']) {
+													$this->manifest_model->data_insert_new($mapping[$no]);
+												} else {
+													unset($mapping[$no]);
+												}
 											}
 											$no++;
 										}
 									}
 									$this->system->set_activity('Import Manifest #'.$file['mawb_no']);
+									$message = '<strong>UPLOAD SUCCESS</strong><br/>Filename: '.$file['file_name'].'<br/>Total Rows: '.count($mapping).'<br/>Need Verification: <a href="'.site_url('manifest/verification?file_id=' . $file['file_id']).'">Click here for verification</a>';
 									$redirect = site_url('manifest/verification?file_id=' . $file['file_id']);
 								} else {
-									$error_header = implode('   |   ', $error_header);
+									$error_header = implode('</li><li>', $error_header);
+									$error_header = '<ol><li>'.$error_header.'</li></ol>';
 									$status = 'error';
-									$message = json_encode('Format header incorrect, please check below <br>'.$error_header);
+									$message = '<strong>Upload Failed</strong><br/>Below is incorrect header, please fixing:<br>'.$error_header;
 								}
 								unlink(PATH_ATTACH . $file_data['file_name']);
 							} else {
 								$status = 'error';
-								$message = 'Mawb with no. <strong>'.$file['mawb_no'].'</strong> has been to uploaded';
+								$message = '<strong>Upload Failed</strong><br/>Mawb with no. <strong>'.$file['mawb_no'].'</strong> has been to uploaded';
 							}
 						}
 					} else {

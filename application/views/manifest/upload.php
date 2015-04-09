@@ -317,20 +317,28 @@ $(document).ready(function(){
             $.colorbox({
                 inline:true,
                 href:$('#upload_progress_modal'),
-                overlayClose:false,
-                closeButton:true
+                overlayClose:false
             })
         },
         dataType: 'json',
         success: function(data) {
             if(data.status == 'error') {
-                $('.progress-message').html(data.message);
+                $.colorbox.close();
+                setTimeout(function(){
+                    $.alertbeck({
+                      title: 'Upload Manifest!',
+                      content: data.message
+                    });
+                }, 1000)
             } else {
                 $('#form_upload_manifest').resetForm();
-                $('.progress-message').html('Upload Finished . . .');
+                $.colorbox.close();
                 setTimeout(function(){
-                    $.colorbox.close();
-                }, 4000);
+                    $.alertbeck({
+                      title: 'Upload Manifest!',
+                      content: data.message
+                    });
+                }, 1000)
             }
         }
     })
@@ -348,7 +356,7 @@ $(document).ready(function(){
                 $('.selected-shipper-text, .selected-consignee-text').html('');
             } else {
                 $.alertbeck({
-                  title: 'Upload Manifest Failed!',
+                  title: 'Upload Manifest!',
                   content: data.message
                 });
             }
