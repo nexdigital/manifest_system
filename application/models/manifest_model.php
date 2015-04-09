@@ -113,6 +113,8 @@ class Manifest_model extends CI_Model {
 		}
 		if(is_numeric($start)) $this->db->limit($limit,$start);
 		if($group_by != false) $this->db->group_by($group_by);
+		$this->db->where('shipper !=','');
+		$this->db->where('consignee !=','');
 		$get = $this->db->get('manifest_data_table D');
 
 		if($get->num_rows() > 0) return $get->result();
