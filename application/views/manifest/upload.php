@@ -389,9 +389,10 @@ $(document).ready(function(){
 })
 
 function search_customer(t) {
-    if(t.value.length > 0) {
+    t = t.value.trim();
+    if(t.length > 0) {
         $('.text-search-customer').html('Searching...');
-        $.post('<?=base_url()?>customers/ajax/search_customer',{'keyword': t.value, 'type':$('.type-search-customer').val()}, function(data){
+        $.post('<?=base_url()?>customers/ajax/search_customer',{'keyword': t, 'type':$('.type-search-customer').val()}, function(data){
             if(data == 0) {
                 $('.text-search-customer').html('No Customers found!');
                 $('.result-search-customer').html('');
