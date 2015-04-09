@@ -195,7 +195,7 @@ class Manifest extends MY_Controller {
 									$no = 1;
 									foreach ($sheetData as $key => $value) {
 
-											if($value[$header['hawb_no']] && in_array($header['hawb_no'].$key, $merge_cell)) {
+											if($value[$header['hawb_no']] || in_array($header['hawb_no'].$key, $merge_cell)) {
 											$new_data_id = 'THS' . date('ymdhis') . $this->manifest_model->data_new_id();
 											$rand_data_id = str_shuffle($new_data_id.time());
 

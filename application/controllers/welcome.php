@@ -27,7 +27,7 @@ class Welcome extends MY_Controller {
 		$this->db->where('url !=','');
 		$this->db->where('user_id !=','');
 		$this->db->where('user_id !=','0');
-		$this->db->order_by('date','desc');
+		$this->db->order_by('date','DESC');
 		$logs = $this->db->get('all_activity_log');
 		$this->set_layout('report/access_logs',array('access_logs' => $logs->result(), 'title' => 'Access Logs'));
 	}
