@@ -39,8 +39,6 @@ class Manifest_model extends CI_Model {
 		$this->db->select('M.*,U.username');
 		$this->db->join('user_table U','U.user_id = M.user_id');
 		$this->db->where('M.file_id',$file_id);
-		$this->db->where('M.shipper !=','');
-		$this->db->where('M.consignee !=','');
 		$get = $this->db->get('manifest_file_table M');
 		if($get->num_rows() > 0) return $get->row();
 		else return false;
