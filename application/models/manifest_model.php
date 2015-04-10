@@ -75,14 +75,16 @@ class Manifest_model extends CI_Model {
 
 	function upgrade_data($hawb_no,$field = false,$value = false) {
 
-
-		$this->db->query("
-			UPDATE manifest_data_table 
-			SET 
-				".$field." = ".$field." + ".$value." 
-			WHERE 
-				hawb_no = '".$hawb_no."'
-			");
+		$value = trim($value);
+		if(is_numeric($value)) {
+			$this->db->query("
+				UPDATE manifest_data_table 
+				SET 
+					".$field." = ".$field." + ".$value." 
+				WHERE 
+					hawb_no = '".$hawb_no."'
+				");
+		}
 	}
 
 	function data_new_id(){

@@ -286,7 +286,7 @@ class Manifest extends MY_Controller {
 			$status_consignee = ($_POST['consignee']) ? true : false;
 
 			if($status_shipper && $status_consignee) {
-				$mapping['file_id'] 		= $new_data_id = 'THS' . date('ymdhis') . $this->manifest_model->data_new_id();;
+				$mapping['data_id'] 		= 'THS' . date('ymdhis') . $this->manifest_model->data_new_id();;
 				$mapping['data_no'] 		= NULL;
 				$mapping['hawb_no'] 		= $_POST['hawb_no'];
 				$mapping['shipper'] 		= $_POST['shipper'];
@@ -296,8 +296,8 @@ class Manifest extends MY_Controller {
 				$mapping['pcs'] 			= $_POST['pcs'];
 				$mapping['kg']				= $this->tools->rounded($_POST['kg']);
 				$mapping['value'] 			= $_POST['value'];
-				$mapping['prepaid']			= $_POST['prepaid'];
-				$mapping['collect']			= $_POST['collect'];
+				$mapping['prepaid']			= ($_POST['type_payment'] == 'prepaid') ? $_POST['amount'] : null;
+				$mapping['collect']			= ($_POST['type_payment'] == 'collect') ? $_POST['amount'] : null;
 				$mapping['rate']			= $_POST['rate'];
 				$mapping['remarks'] 		= $_POST['remarks'];
 				$mapping['status']			= 'VALID';

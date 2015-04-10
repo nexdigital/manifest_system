@@ -148,46 +148,41 @@
 	                        </div>
 	                    </div>
 	                   	<div class="col-lg-6" style="padding:0px;">
-	                   		<div class="col-sm-4">
+	                   		<div class="col-sm-6">
 	                            <div class="form-group">
 	                                <label>Select Payment</label>
-	                                <select class="form-control" id="select-payment" required>
+	                                <select class="form-control" id="select-payment" name="type_payment" required>
 		                                <option value="">Select</option>
 		                                <option value="prepaid">Prepaid</option>
 		                                <option value="collect">Collect</option>
 	                                </select>
 	                            </div>
 	                        </div>
-	                        <div class="col-sm-4">
+	                        <div class="col-sm-6">
 	                            <div class="form-group">
-	                                <label>Prepaid</label>
-	                                <input class="form-control text-prepaid-" type="text" disabled="disabled" required>
-	                                <input class="form-control text-prepaid" type="hidden" name="prepaid">
-	                            </div>
-	                        </div>
-	                        <div class="col-sm-4">
-	                            <div class="form-group">
-	                                <label>Collect</label>
-	                                <input class="form-control text-collect-" type="text" name="collect" disabled="disabled" required>
-	                                <input class="form-control text-collect" type="hidden" name="collect">
+	                                <label>Amount</label>
+	                                <input class="form-control text-amount" type="text" disabled="disabled" required>
+	                                <input class="form-control text-amount" type="hidden" name="amount" required>
 	                            </div>
 	                        </div>
 	                    </div>
 	                </div>
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label>Shipper</label>
-                            <p class="selected-shipper-text"></p>
-                            <input type="hidden" name="shipper" class="selected-shipper" required>
-                            <button type="button" class="btn btn-default btn-xs submit-upload select-customer" data_type="shipper">Select shipper</button>
+                    <div class="col-sm-12" style="padding:0px;">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Shipper</label>
+                                <p class="selected-shipper-text"></p>
+                                <input type="hidden" name="shipper" class="selected-shipper" required>
+                                <button type="button" class="btn btn-default btn-xs submit-upload select-customer" data_type="shipper">Select shipper</button>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label>Consignee</label>
-                            <p class="selected-consignee-text"></p>
-                            <input type="hidden" name="consignee" class="selected-consignee" required>
-                            <button type="button" class="btn btn-default btn-xs submit-upload select-customer" data_type="consignee">Select consignee</button>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Consignee</label>
+                                <p class="selected-consignee-text"></p>
+                                <input type="hidden" name="consignee" class="selected-consignee" required>
+                                <button type="button" class="btn btn-default btn-xs submit-upload select-customer" data_type="consignee">Select consignee</button>
+                            </div>
                         </div>
                     </div>
                     <div class="col-sm-6">
@@ -271,7 +266,7 @@ $(document).ready(function(){
     $('#form_upload_manifest, #form_upload_manifest_other').resetForm();
     $('select.form-control, .upload_type, .flight_from, .flight_to').select2();
 	
-    $('.text-pkg, .text-kg, text-rate').blur(function(){
+    $('.text-pkg, .text-kg, .text-rate').blur(function(){
         var pkg = $('input.text-pkg').val();
         var kg = $('input.text-kg').val();
         var rate = $('input.text-rate').val();
@@ -279,16 +274,7 @@ $(document).ready(function(){
         var type = $('select#select-payment').val();
 
         $.post('<?=base_url()?>manifest/formula/subtotal',{'pkg':pkg,'kg':kg,'rate':rate},function(data){
-            if(type == 'prepaid') {
-                $('.text-prepaid-, .text-prepaid').val(data);
-                $('.text-collect-, text-collect').val('');
-            } else if(type == 'collect') {
-                $('.text-prepaid-, text-prepaid').val('');
-                $('.text-collect-, text-collect').val(data);
-            } else {
-                $('.text-collect-, text-collect').val('');
-                $('.text-prepaid-, text-prepaid').val('');
-            }
+            $('.text-amount, .text-amount').val(data);
         })
     })
     $('select#select-payment').change(function(){
@@ -298,18 +284,13 @@ $(document).ready(function(){
 
     	var type = $(this).val();
 
-		$.post('<?=base_url()?>manifest/formula/subtotal',{'pkg':pkg,'kg':kg,'rate':rate},function(data){
-			if(type == 'prepaid') {
-				$('.text-prepaid-, .text-prepaid').val(data);
-				$('.text-collect-, text-collect').val('');
-			} else if(type == 'collect') {
-				$('.text-prepaid-, text-prepaid').val('');
-				$('.text-collect-, text-collect').val(data);
-			} else {
-				$('.text-collect-, text-collect').val('');
-				$('.text-prepaid-, text-prepaid').val('');
-			}
-		})
+        if(type) {
+    		$.post('<?=base_url()?>manifest/formula/subtotal',{'pkg':pkg,'kg':kg,'rate':rate},function(data){
+    			$('.text-amount, .text-amount').val(data);
+    		})
+        } else {
+            $('.text-amount, .text-amount').val(0);            
+        }
 	})
 	$('#form_upload_manifest').validate();
     $('#form_upload_manifest').ajaxForm({
