@@ -10,9 +10,14 @@
                         <div class="row">
                             <form method="get" action="<?=base_url()?>report/snow">
                             <div class="col-lg-12">
+
+                            
                                 <div class="form-group">
                                 <label>Select Date</label>
-                                <input class="form-control datepicker" type="text" name="date" value="<?=date('Y-m-d')?>" required>
+                                 <div class="input-append date form_datetime2">
+                                    <input size="16" type="text" value="" class="form-control" readonly="">
+                                    <span class="add-on"><i class="icon-th"></i></span>
+                              </div>
                                 </div>
                             </div>
                             <div class="col-lg-12" style="padding:0px;">
@@ -49,13 +54,27 @@
     </div>
 </div>
 
+ 
 <script type="text/javascript">
 $(document).ready(function(){
     $('select.form-control').select2();
-    $('.datepicker').datepicker({
-        format: 'yyyy-mm-dd',
-        todayHighlight: true,
-        autoclose: true
-    })
+
+     $('a[href^="#"]').click(function(){  
+        var the_id = $(this).attr("href");  
+        $('html, body').animate({  
+            scrollTop:$(the_id).offset().top  
+        }, 'slow');  
+        return false;  
+    });
+
+    $(".form_datetime1").datetimepicker({format: 'yyyy-mm-dd hh:ii', forceParse: true});
+    $(".form_datetime2").datetimepicker({
+      format: "yyyy-mm-dd ",
+      todayBtn: true,
+       minView: 2
+  
+
+    });
+    
 })
 </script>

@@ -46,5 +46,10 @@
 
     <link rel="stylesheet" href="<?=base_url() ?>asset/library/alertbect/alertbeck.css">
     <script type="text/javascript" src="<?=base_url()?>asset/library/alertbect/alertbeck.js"></script>   
+
+    <!-- new datepicker -->
+        <link href="<?php echo base_url()?>style/css/bootstrap-datetimepicker.css" rel="stylesheet">
+         <script src="<?php echo base_url()?>style/js/date/bootstrap-datetimepicker.min.js"></script>
+         <!-- /new datepicker -->  
 </head>
 <body>
