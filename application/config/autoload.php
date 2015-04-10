@@ -114,7 +114,7 @@ $autoload['model'] = array('manifest_model','customers_model','user_model','syst
 define('PATH',realpath('./'));
 define('PATH_APP',PATH.'/application/');
 define('PATH_ATTACH',PATH.'/attach/');
-define('PATH_QRCODE',PATH.'/asset/qrcode/');
+define('PATH_BARCODE',PATH.'/asset/barcode/');
 define('PATH_PDF',PATH.'/asset/pdf/');
 define('PATH_DOWNLOAD',PATH.'/download/');
 

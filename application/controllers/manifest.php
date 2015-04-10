@@ -23,7 +23,8 @@ class Manifest extends MY_Controller {
 
 	function verification() {
 		if(!isset($_GET['file_id'])) {
-			$this->set_layout('manifest/verification_list',array('title' => 'Verification Manifest'));
+			$data['get_file_not_verified'] = $this->manifest_model->get_file_not_verified();
+			$this->set_layout('manifest/verification_list',$data);
 		} else {
 			$file_id = $_GET['file_id'];
 			$where = array('D.file_id' => $file_id, 'D.shipper !=' => '\'\'', 'D.consignee !=' => '\'\'');
@@ -44,7 +45,12 @@ class Manifest extends MY_Controller {
 	function data() {
 		if($this->session->userdata('login') != TRUE) redirect(base_url());
 
-		$data = array('title' => 'Data Manifest', 'list_file' => $this->manifest_model->get_file(), 'list_shipper' => $this->customers_model->get_list('shipper'), 'list_consignee' => $this->customers_model->get_list('consignee'));
+		$data = array(
+			'title' => 'Data Manifest',
+			'get_all_data' => $this->manifest_model->get_all_data(), 
+			'list_shipper' => $this->customers_model->get_list('shipper'), 
+			'list_consignee' => $this->customers_model->get_list('consignee')
+		);
 		$this->set_layout('manifest/data',$data);
 	}
 
@@ -326,6 +332,7 @@ class Manifest extends MY_Controller {
 			$mapping['hawb_no'] 		= $_POST['hawb_no'];
 			$mapping['pkg'] 			= $_POST['pkg'];
 			$mapping['description'] 	= $_POST['description'];
+			$mapping['remarks']		 	= $_POST['remarks'];
 			$mapping['pcs'] 			= $_POST['pcs'];
 			$mapping['kg']				= $_POST['kg'];
 			$mapping['value'] 			= $_POST['value'];

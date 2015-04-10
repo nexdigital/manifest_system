@@ -64,7 +64,7 @@ $(document).ready(function(){
 
     $('#download-excel').click(function(){
         var type_arr = [];
-        $('input.checkbox').each(function(){
+        $('input.checkbox:checked').each(function(){
             type_arr.push($(this).val());
         })
 

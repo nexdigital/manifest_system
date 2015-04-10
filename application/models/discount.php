@@ -31,7 +31,7 @@ class Discount extends CI_Model {
 		else return false;
 	}
 
-	function get_by_data_id($data_id,$type,$where = array('Approved')) {
+	function get_by_data_id($data_id,$type,$status = array('Approved')) {
 		$this->db->where('data_id',$data_id);
 		$this->db->where('type',$type);
 		$this->db->where_in('status',$status);
@@ -44,15 +44,17 @@ class Discount extends CI_Model {
 		$data = $this->manifest_model->get_by_data_id($data_id);
 		switch ($type) {
 			case 'rate':
+				if($discount <= $data->rate) return true;
+				else return false;
+				break;
+			case 'kurs':
 				if($discount <= $data->nt_kurs) return true;
 				else return false;
 				break;
-			case 'value':
-				if($discount <= $data->value) return true;
-				else return false;
-				break;
 			case 'total':
-				if($discount <= (($data->kg * $data->value) * $data->nt_kurs)) return true;
+				$manifest_data = $this->manifest_model->get_by_data_id($data_id);
+				$normal_price = $this->manifest_model->sub_total($manifest_data->hawb_no);
+				if($discount <= $normal_price) return true;
 				else return false;
 				break;
 		}

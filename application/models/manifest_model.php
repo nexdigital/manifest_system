@@ -27,13 +27,12 @@ class Manifest_model extends CI_Model {
 		$get = $this->db->get('manifest_file_table F');
 		return $get->result();
 	}
-	function get_file() {
-		$this->db->join('manifest_data_table D','D.file_id = F.file_id');
-		$this->db->where('D.status','VALID');
-		$this->db->group_by('F.file_id');
-		$get = $this->db->get('manifest_file_table F');
+	function get_all_data() {
+		$get = $this->db->query("select d.*, (select mawb_no from manifest_file_table f where f.file_id = d.file_id) as 'mawb_no' from manifest_data_table d where lower(d.status) = 'valid' order by created_date desc");
 		return $get->result();
 	}
+
+
 
 	function get_by_file_id($file_id) {
 		$this->db->select('M.*,U.username');
@@ -57,6 +56,11 @@ class Manifest_model extends CI_Model {
 		$get = $this->db->get('manifest_data_table');
 		if($get->num_rows() > 0) return true;
 		else return false;
+	}
+
+	function get_file_not_verified() {
+		$get = $this->db->query("select f.*, (select count(d.data_id) from manifest_data_table d where d.file_id = f.file_id  ) as total_data, (select count(d.data_id) from manifest_data_table d where d.file_id = f.file_id and lower(d.status) = 'valid') as verified, (select count(d.data_id) from manifest_data_table d where d.file_id = f.file_id and lower(d.status) != 'valid') as not_verified  from manifest_file_table f join manifest_data_table d2 on d2.file_id = f.file_id where lower(d2.status) != 'valid' group by d2.file_id order by f.created_date desc");
+		return $get->result();
 	}
 
 	#DATA MANIFEST ->
@@ -518,6 +522,47 @@ class Manifest_model extends CI_Model {
         $this->db->where('F.last_update <=', $date_end);
 		$get = $this->db->get('manifest_data_table F');
 		return $get->result();
+    }
+
+    function sub_total($hawb_no,$status = 'normal',$status_discount = 'Approved'){
+    	$manifest = $this->get_by_hawb_no($hawb_no);
+    	$extra_charge = $this->manifest_model->get_extra_charge($hawb_no);
+
+    	$rate = $manifest->nt_kurs;
+
+    	if($status == 'discount') {
+			if($this->discount->check($manifest->data_id,'rate',array($status_discount)) == false) {
+			    $rate = $value - $this->discount->get_by_data_id($manifest->data_id,'rate',array($status_discount))->discount;
+			}
+		}
+
+		$kurs = $manifest->nt_kurs;
+    	if($status == 'discount') {
+			if($this->discount->check($manifest->data_id,'kurs',array($status_discount)) == false) {
+			    $kurs = $kurs - $this->discount->get_by_data_id($manifest->data_id,'kurs',array($status_discount))->discount;
+			}
+		}
+
+		$extra_total = 0;
+    	if($status == 'discount') {
+			if($extra_charge != false) {
+			    foreach ($extra_charge as $row) {
+			        if($row->currency == 'nt') $rate = $rate + $row->price;
+			        else $extra_total = $extra_total + $row->price; 
+			    }
+			}
+		}
+
+		$total = ($rate * $manifest->kg);
+		$total = $total * $kurs;
+		$total = $total + $extra_total;
+
+		if($status == 'discount') {
+			if($this->discount->check($manifest->data_id,'total',array($status_discount)) == false) {
+			    $total = $total - $this->discount->get_by_data_id($manifest->data_id,'total',array($status_discount))->discount;
+			}
+		}
+		return $total;
     }
 }
 ?>

@@ -39,10 +39,9 @@
     <script type="text/javascript" src="<?=base_url('asset/library/highchart/modules/exporting.js')?>"></script>
     <script type="text/javascript" src="<?=base_url()?>style/js/daterangepicker/daterangepicker.js"></script>
     <script type="text/javascript" src="<?=base_url()?>style/js/datepicker/bootstrap-datepicker.js"></script>
-    <script src="<?=base_url()?>asset/library/jqgrid/src/i18n/grid.locale-en.js" type="text/javascript"></script>
-    <script src="<?=base_url()?>asset/library/jqgrid/js/jquery.jqGrid.min.js" type="text/javascript"></script>
 
     <script src="<?=base_url()?>asset/javascript/resizing.js" type="text/javascript"></script>
+    <script src="<?=base_url()?>asset/javascript/site.js" type="text/javascript"></script>
 
     <link rel="stylesheet" href="<?=base_url() ?>asset/library/alertbect/alertbeck.css">
     <script type="text/javascript" src="<?=base_url()?>asset/library/alertbect/alertbeck.js"></script>   

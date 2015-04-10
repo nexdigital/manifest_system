@@ -1,43 +1,37 @@
-<div id="wrapper">
-    <div id="page-wrapper">
-        <table id="jqGrid"></table>
-        <div id="jqGridBar"></div>
-    </div>
+<div id="page-wrapper">
+    <table id="dataTable" class="table table-bordered">
+        <thead>
+            <tr>
+                <th width="50px">Select</th>
+                <th>Filename</th>
+                <th width="75px">Total Data</th>
+                <th width="75px">Verified</th>
+                <th width="80px">Not Verified</th>
+                <th width="85px">Upload date</th>
+                <th width="80px">Upload By</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <?php
+                foreach ($get_file_not_verified as $key => $row) {
+                    echo '
+                    <tr>
+                        <td align="center">
+                            <button type="button" class="btn btn-primary btn-xs" onCLick="window.location = \''.site_url('manifest/verification?file_id='.$row->file_id).'\'">
+                                <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                            </button>
+                        </td>
+                        <td>'.$row->file_name.'</td>
+                        <td align="center">'.$row->total_data.'</td>
+                        <td align="center">'.$row->verified.'</td>
+                        <td align="center">'.$row->not_verified.'</td>
+                        <td>'.substr($row->created_date,0,10).'</td>
+                        <td>'.$row->user_id.'</td>
+                    </tr>
+                    ';
+                }
+            ?>
+        </tbody>
+    </table>
 </div>
-
-<script type="text/javascript">
-$(document).ready(function(){
-    jQuery("#jqGrid").jqGrid({ 
-        url:'<?=site_url('manifest/ajax/get_verification_list')?>', 
-        datatype: "json",
-        colNames:['Filename','Consign To', 'Mawb No', 'Flight From', 'Flight To','Gross Weight','Upload Date','User','Select'], 
-        colModel:[
-            {name:'file_name', index:'filename', width:200, align:'left'}, 
-            {name:'consign_to', index:'consign_to', width:100},
-            {name:'mawb_no', index:'mawb_no', width:120},
-            {name:'flight_from', index:'flight_from', width:120},
-            {name:'flight_to', index:'flight_to', width:120},
-            {name:'gross_weight', index:'gross_weight', width:70},
-            {name:'created_date', index:'created_date', width:120},
-            {name:'username', index:'user', width:120},
-            {name:'Select',search:false,index:'data_id',width:70,sortable: false,formatter: action, align:'center'},
-        ],
-        shrinkToFit: true,
-        rowTotal: <?=count($this->manifest_model->get_filtering_data(null,null,array('D.status' => 'Unverified'),'D.file_id'))?>,
-        height:300,
-        rowNum:100,
-        loadonce:true, 
-        mtype: "POST", 
-        pager: '#jqGridBar',
-        caption: "List Manifest Unveryfication"
-    }); 
-    jQuery("#jqGrid").jqGrid('filterToolbar',{stringResult: true,searchOnEnter : false});
-})
-
-function action(val,options,rowdata,action) {
-    return '<a href="javascript:;" onCLick="details(\'' + rowdata.file_id + '\')">Select</a>';
-}
-function details(file_id){
-    window.location = '<?=site_url()?>manifest/verification?file_id=' + file_id;
-}
-</script>

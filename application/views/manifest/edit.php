@@ -32,7 +32,7 @@ $consignees = $consignee->name.'
 		    <div class="col-sm-6">
 		    	<div class="form-group">
 			    	<label>Shipper</label>
-			        <textarea class="form-control" rows="4" disabled><?=ucfirst($shippers);?></textarea>
+			        <textarea class="form-control" rows="4" style="resize:none;" readonly><?=ucfirst($shippers);?></textarea>
 			    </div>
 		    </div>
 			<div class="col-sm-6" style="padding:0px; margin-top:-80px;">
@@ -95,7 +95,7 @@ $consignees = $consignee->name.'
 		    <div class="col-sm-6">
 		    	<div class="form-group">
 		    		<label>Consignee</label>
-		        	<textarea class="form-control" rows="4" disabled><?=ucfirst($shippers);?></textarea>
+		        	<textarea class="form-control" rows="4" style="resize:none;" readonly><?=ucfirst($consignees);?></textarea>
 		    	</div>
 		    </div>
 		    <div class="col-sm-6">
@@ -103,13 +103,19 @@ $consignees = $consignee->name.'
 			    	<label>Description</label>
 			        <textarea class="form-control" rows="3" name="description" style="resize:none;"><?=ucfirst($data->description);?></textarea>
 			    </div>
-            <div class="form-group">
-            	<label>Payment</label>
-                <select name="repayment" class="form-control">
-                      <option value="<?=$data->shipper?>"><?=$shipper->name?></option>
-                      <option value="<?=$data->consignee?>"><?=$consignee->name?></option>
-                </select>
-            </div>
+	            <div class="form-group">
+	            	<label>Payment</label>
+	                <select name="repayment" class="form-control">
+	                      <option value="<?=$data->shipper?>"><?=$shipper->name?></option>
+	                      <option value="<?=$data->consignee?>"><?=$consignee->name?></option>
+	                </select>
+	            </div>
+			</div>
+		    <div class="col-sm-6">
+		     	<div class="form-group">
+			    	<label>Remarks</label>
+			        <textarea class="form-control" rows="3" name="remarks" style="resize:none;"><?=ucfirst($data->remarks);?></textarea>
+			    </div>
 			</div>
 		</form>
 	</div>

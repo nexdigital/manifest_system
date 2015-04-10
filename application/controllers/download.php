@@ -17,6 +17,10 @@ class Download extends MY_Controller {
 
 			$data['details'] = $this->manifest_model->print_get($print_id);
 			$data['extra_charge'] = $this->manifest_model->get_extra_charge($data['details']->hawb_no);
+
+			$this->barcode_qrcode($data['details']->hawb_no);
+			$this->barcode_1d($data['details']->hawb_no);
+
 			$html = $this->load->view('download/airwaybill',$data,true);
 			$pdf->WriteHTML($html);
 			$pdf->Output($file_path, 'I');
@@ -642,7 +646,9 @@ class Download extends MY_Controller {
 		    $drawException = $exception;
 		}
 
-		$drawing = new BCGDrawing('', $color_white);
+		$path = PATH_BARCODE.'1D_'.$string.'.png';
+
+		$drawing = new BCGDrawing($path, $color_white);
 		if($drawException) {
 		    $drawing->drawException($drawException);
 		} else {
@@ -651,13 +657,17 @@ class Download extends MY_Controller {
 		}
 
 		header('Content-Type: image/png');
-		header('Content-Disposition: inline; filename="barcode.png"');
-		$drawing->finish(BCGDrawing::IMG_FORMAT_PNG);
+		header('Content-Disposition: inline; filename="'.PATH_BARCODE.'1d_'.$string.'.png"');
+		$drawing->finish(BCGDrawing::IMG_FORMAT_PNG,100);
     }
 
     function barcode_qrcode($string) {
     	require_once(PATH_APP . 'libraries/phpqrcode/qrlib.php');
-    	QRcode::png($string);
+
+    	$path = PATH_BARCODE.'QR_'.$string.'.png';
+    	if(!file_exists($path)) {
+	    	QRcode::png($string,$path);
+	    }
     }
 }
 

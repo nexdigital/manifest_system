@@ -42,9 +42,9 @@ $total = $total + $extra_total;
 <div class="paper">
     <div class="contaier" style="height:30mm; background-color:#fff; overflow:hidden;">
         <div class="header">
-            <img src="<?php echo base_url()?>download/barcode/QRCODE/<?php echo $details->hawb_no?>" class="barcode" style="float:left; height:60px; width:60px; margin-right:20px;">
-            <img src="<?php echo base_url()?>asset/images/tata-logo.png" class="logo" style="float:left; height:55px; margin-top:5px;">
-            <img src="<?php echo base_url()?>download/barcode/1D/<?php echo $details->hawb_no?>" class="barcode" style="float:right; margin-top:5px; height:50px; width:140px;">
+            <img src="<?=base_url()?>asset/barcode/QR_<?php echo $details->hawb_no;?>.png" class="barcode" style="float:left; height:60px; width:60px; margin-right:20px;">
+            <img src="<?=base_url()?>asset/images/tata-logo.png" class="logo" style="float:left; height:55px; margin-top:5px;">
+            <img src="<?=base_url()?>asset/barcode/1D_<?php echo $details->hawb_no;?>.png" class="barcode" style="float:right; margin-top:5px; height:50px;">
         </div>
         <div class="info">
             <table style="width:100%:"><tr>
@@ -112,9 +112,9 @@ $total = $total + $extra_total;
 
     <div class="contaier" style="height:30mm; background-color:#fff; overflow:hidden; border-top:1px dashed #000; padding-top:4px; margin-top:4px;">
         <div class="header">
-            <img src="<?php echo base_url()?>download/barcode/QRCODE/<?php echo $details->hawb_no?>" class="barcode" style="float:left; height:60px; width:60px; margin-right:20px;">
-            <img src="<?php echo base_url()?>asset/images/tata-logo.png" class="logo" style="float:left; height:55px; margin-top:5px;">
-            <img src="<?php echo base_url()?>download/barcode/1D/<?php echo $details->hawb_no?>" class="barcode" style="float:right; margin-top:5px; height:50px; width:140px;">
+            <img src="<?=base_url()?>asset/barcode/QR_<?php echo $details->hawb_no;?>.png" class="barcode" style="float:left; height:60px; width:60px; margin-right:20px;">
+            <img src="<?=base_url()?>asset/images/tata-logo.png" class="logo" style="float:left; height:55px; margin-top:5px;">
+            <img src="<?=base_url()?>asset/barcode/1D_<?php echo $details->hawb_no;?>.png" class="barcode" style="float:right; margin-top:5px; height:50px;">
         </div>
         <div class="info">
             <table style="width:100%:"><tr>
@@ -182,9 +182,9 @@ $total = $total + $extra_total;
 
     <div class="contaier" style="height:90mm; margin-top:4px; background-color:#fff; overflow:hidden; border-top:1px dashed #000; padding-top:4px;">
         <div class="header">
-            <img src="<?php echo base_url()?>download/barcode/QRCODE/<?php echo $details->hawb_no?>" class="barcode" style="float:left; height:60px; width:60px; margin-right:20px;">
-            <img src="<?php echo base_url()?>asset/images/tata-logo.png" class="logo" style="float:left; height:55px; margin-top:5px;">
-            <img src="<?php echo base_url()?>download/barcode/1D/<?php echo $details->hawb_no?>" class="barcode" style="float:right; margin-top:5px; height:50px; width:140px;">
+            <img src="<?=base_url()?>asset/barcode/QR_<?php echo $details->hawb_no;?>.png" class="barcode" style="float:left; height:60px; width:60px; margin-right:20px;">
+            <img src="<?=base_url()?>asset/images/tata-logo.png" class="logo" style="float:left; height:55px; margin-top:5px;">
+            <img src="<?=base_url()?>asset/barcode/1D_<?php echo $details->hawb_no;?>.png" class="barcode" style="float:right; margin-top:5px; height:50px;">
         </div>
         <div class="info">
             <table style="width:100%:"><tr>

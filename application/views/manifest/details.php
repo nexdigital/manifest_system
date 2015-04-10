@@ -26,25 +26,25 @@ $consignee = '<a href="javascript:;" onCLick="parent.window.location=\''.base_ur
 	    <div class="col-sm-6">
 	        <div class="form-group">
 	            <label>Hawb No</label>
-	            <input class="form-control" type="text" value="<?=$data->hawb_no;?>" disabled>
+	            <input class="form-control" type="text" value="<?=$data->hawb_no;?>" readonly>
 	        </div>
 	    </div>
 	    <div class="col-sm-2">
 	    	<div class="form-group">
 	            <label>Pkg</label>
-	            <input class="form-control" type="text" value="<?=$data->pkg;?>" disabled>
+	            <input class="form-control" type="text" value="<?=$data->pkg;?>" readonly>
 	        </div>
 	    </div>
 	    <div class="col-sm-2">
 	    	<div class="form-group">
 	            <label>Pcs</label>
-	            <input class="form-control" type="text" value="<?=$data->pcs;?>" disabled>
+	            <input class="form-control" type="text" value="<?=$data->pcs;?>" readonly>
 	        </div>
 	    </div>
 	    <div class="col-sm-2">
 	    	<div class="form-group">
 	            <label>KG</label>
-	            <input class="form-control" type="text" value="<?=$data->kg;?>" disabled>
+	            <input class="form-control" type="text" value="<?=$data->kg;?>" readonly>
 	        </div>
 	    </div>
 	    <div class="col-sm-6">
@@ -58,7 +58,7 @@ $consignee = '<a href="javascript:;" onCLick="parent.window.location=\''.base_ur
 	    	</div>
 	     	<div class="form-group">
 		    	<label>Description</label>
-		        <textarea class="form-control" rows="3" disabled><?=ucfirst($data->description);?></textarea>
+		        <textarea class="form-control" rows="3" style="resize:none;" readonly><?=ucfirst($data->description);?></textarea>
 		    </div>
 	    </div>
         
@@ -66,39 +66,45 @@ $consignee = '<a href="javascript:;" onCLick="parent.window.location=\''.base_ur
 	    <div class="col-sm-2">
 	    	<div class="form-group">
 	            <label>Value</label>
-	            <input class="form-control" type="text" value="<?=$data->value;?>" disabled>
+	            <input class="form-control" type="text" value="<?=$data->value;?>" readonly>
 	        </div>
 	    </div>
 	    <div class="col-sm-2">
 	    	<div class="form-group">
 	            <label>Prepaid</label>
-	            <input class="form-control" type="text" value="<?=$data->prepaid;?>" disabled>
+	            <input class="form-control" type="text" value="<?=$data->prepaid;?>" readonly>
 	        </div>
 	    </div>
 	    <div class="col-sm-2">
 	    	<div class="form-group">
 	            <label>Collect</label>
-	            <input class="form-control" type="text" value="<?=$data->collect;?>" disabled>
+	            <input class="form-control" type="text" value="<?=$data->collect;?>" readonly>
 	        </div>
 	    </div>
 	    <div class="col-sm-2">
 	    	<div class="form-group">
 	            <label>Rate</label>
-	            <input class="form-control" type="text" value="<?=$data->rate;?>" disabled>
+	            <input class="form-control" type="text" value="<?=$data->rate;?>" readonly>
 	        </div>
 	    </div>
 	    <div class="col-sm-2">
 	     	<div class="form-group">
 		    	<label>Other Charge Tata</label>
-		        <input class="form-control" type="text" value="<?=$data->other_charge_tata;?>" disabled>
+		        <input class="form-control" type="text" value="<?=$data->other_charge_tata;?>" readonly>
 		    </div>
 	    </div>
 	   	<div class="col-sm-2">
 	     	<div class="form-group">
 		    	<label>Other Charge PML</label>
-		        <input class="form-control" type="text" value="<?=$data->other_charge_pml;?>" disabled>
+		        <input class="form-control" type="text" value="<?=$data->other_charge_pml;?>" readonly>
 		    </div>
 	    </div>
+	   	<div class="col-sm-6">
+			<div class="form-group">
+				<label>Remarks</label>
+				<textarea class="form-control" rows="3" style="resize:none;" readonly><?=ucfirst($data->remarks);?></textarea>
+			</div>
+		</div>
 	</div>
 	<?php if($extra_charge != FALSE) { ?>
 	<table  class="table table-striped table-bordered table-hover">
