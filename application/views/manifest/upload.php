@@ -148,7 +148,17 @@
 	                        </div>
 	                    </div>
 	                   	<div class="col-lg-6" style="padding:0px;">
-	                   		<div class="col-sm-6">
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label>Currency</label>
+                                    <select class="form-control" id="select-payment" name="currency" required>
+                                        <option value="nt">NT</option>
+                                        <option value="usd">USD</option>
+                                        <option value="id">IDR</option>
+                                    </select>
+                                </div>
+                            </div>
+	                   		<div class="col-sm-4">
 	                            <div class="form-group">
 	                                <label>Select Payment</label>
 	                                <select class="form-control" id="select-payment" name="type_payment" required>
@@ -158,7 +168,7 @@
 	                                </select>
 	                            </div>
 	                        </div>
-	                        <div class="col-sm-6">
+	                        <div class="col-sm-4">
 	                            <div class="form-group">
 	                                <label>Amount</label>
 	                                <input class="form-control text-amount" type="text" disabled="disabled" required>

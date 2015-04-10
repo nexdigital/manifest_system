@@ -246,6 +246,7 @@ class Manifest extends MY_Controller {
 												$mapping[$no]['mawb_type']			= ($mawb_type && strlen($mawb_type) > 0 && in_array($mawb_type, $mawb_type_list)) ? $mawb_type : 'ftz';
 												$mapping[$no]['rand_data_id']		= $rand_data_id;
 												$mapping[$no]['deadline']			= $this->tools->deadline('+'.$this->tools->get_deadline_days());
+												$mapping[$no]['currency']			= 'NT';
 												if($mapping[$no]['hawb_no'] && $mapping[$no]['shipper'] && $mapping[$no]['consignee']) {
 													$this->manifest_model->data_insert_new($mapping[$no]);
 												} else {
@@ -312,6 +313,7 @@ class Manifest extends MY_Controller {
 				$mapping['mawb_type']			= NULL;
 				$mapping['rand_data_id']		= $rand_data_id;
 				$mapping['manifest_type']		= $_POST['manifest_type'];
+				$mapping['currency']			= $_POST['currency'];
 				$this->manifest_model->data_insert_new($mapping);
 				$this->system->set_activity('Insert Single Data #'.$mapping['hawb_no']);
 				echo json_encode(array('status' => 'success'));
