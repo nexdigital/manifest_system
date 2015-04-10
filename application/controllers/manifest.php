@@ -192,7 +192,12 @@ class Manifest extends MY_Controller {
 								if(count($header_format) == count($header)) {
 									$this->manifest_model->file_insert_new($file);
 									$no = 1;
+
+									$mawb_type_list = array('ftz','hc','pouchen_ftz','pouchen_hc','fengtay_ftz','fengtay_hc','pibk');
+
 									foreach ($sheetData as $key => $value) {
+
+										$mawb_type = trim(str_ireplace(' ','_',strtolower($value[$header['mawb_type']])));
 
 										if($value[$header['hawb_no']] || in_array($header['hawb_no'].$key, $merge_cell)) {
 											$new_data_id = 'THS' . date('ymdhis') . $this->manifest_model->data_new_id();
@@ -238,7 +243,7 @@ class Manifest extends MY_Controller {
 												$mapping[$no]['status_delivery']	= 'Arrived in Jakarta';
 												$mapping[$no]['other_charge_tata']	= (!in_array($header['other_charge_tata'].$key, $merge_cell)) ? $value[$header['other_charge_tata']] : $sheetData[$this->system->get_cell_key($header['other_charge_tata'].$key,$merge_cell)][$header['other_charge_tata']];
 												$mapping[$no]['other_charge_pml']	= (!in_array($header['other_charge_pml'].$key, $merge_cell)) ? $value[$header['other_charge_pml']] : $sheetData[$this->system->get_cell_key($header['other_charge_pml'].$key,$merge_cell)][$header['other_charge_pml']];
-												$mapping[$no]['mawb_type']			= (str_ireplace(' ','_',strtolower($value[$header['mawb_type']]))) ? str_ireplace(' ','_',strtolower($value[$header['mawb_type']])) : 'ftz';
+												$mapping[$no]['mawb_type']			= ($mawb_type && strlen($mawb_type) > 0 && in_array($mawb_type, $mawb_type_list)) ? $mawb_type : 'ftz';
 												$mapping[$no]['rand_data_id']		= $rand_data_id;
 												$mapping[$no]['deadline']			= $this->tools->deadline('+'.$this->tools->get_deadline_days());
 												if($mapping[$no]['hawb_no'] && $mapping[$no]['shipper'] && $mapping[$no]['consignee']) {
