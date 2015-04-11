@@ -33,7 +33,7 @@
             </div>
         </div>
         <div class="col-lg-12">
-            <div class="col-lg-6" style="padding:0px 10px 0px 0px;">
+           <!-- <div class="col-lg-6" style="padding:0px 10px 0px 0px;">
                 <div class="form-group">
                     <label>Upload Date</label>
                     <input class="form-control" placeholder="Start Date" id="start-date">
@@ -45,7 +45,28 @@
                     <input class="form-control" placeholder="End Date" id="end-date">
                 </div>
             </div>
-        </div>
+        </div>-->
+
+        <div class="col-lg-6" style="padding:0px 10px 0px 0px;">
+                <div class="form-group">
+                    <label>Upload Date</label>
+                        <div class="input-append date form_datetime2">
+                                    <input size="16" type="text" value=""  id="start-date"  class="form-control" readonly="">
+                                    <span class="add-on"><i class="icon-th"></i></span>
+                              </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6" style="padding:0px 10px 0px 0px;">
+                <div class="form-group">
+                    <label>Upload Date</label>
+                      <div class="input-append date form_datetime2">
+                                    <input size="16" type="text" value=""  id="end-date" class="form-control" readonly="">
+                                    <span class="add-on"><i class="icon-th"></i></span>
+                              </div>
+                </div>
+            </div>
+
         <div class="col-lg-12">
             <button type="submit" class="btn btn-success btn-sm" id="download-excel">Download to excel</button>
         </div>
@@ -73,7 +94,15 @@ $(document).ready(function(){
         })
     })
 
-    $('#start-date').datepicker({
+      $(".form_datetime2").datetimepicker({
+      format: "yyyy-mm-dd ",
+      todayBtn: true,
+       minView: 2
+  
+
+    });
+
+  /*  $('#start-date').datepicker({
         format:'yyyy-mm-dd',
         weekStart: 1,
         endDate: FromEndDate, 
@@ -96,7 +125,7 @@ $(document).ready(function(){
         FromEndDate = new Date(selected.date.valueOf());
         FromEndDate.setDate(FromEndDate.getDate(new Date(selected.date.valueOf())));
         $('#start-date').datepicker('setEndDate', FromEndDate);
-    });
+    });*/
 
 })
 
