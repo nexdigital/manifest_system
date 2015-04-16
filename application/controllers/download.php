@@ -7,7 +7,6 @@ class Download extends MY_Controller {
 	}
 
 	public function pdf() {
-		$print_id = $_GET['print_id'];
 		$name = md5(time());
 		$file_path = PATH_PDF . $name . '.pdf';
 
