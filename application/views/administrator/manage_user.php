@@ -147,6 +147,10 @@ $(document).ready(function() {
                                         <td>User level:</td>
                                         <td>'.$row->type.'</td>
                                     </tr>
+                                     <tr>
+                                        <td>email</td>
+                                        <td>'.$row->email.'</td>
+                                    </tr>
                                     <tr>
                                         <td>Registered since:</td>
                                         <td>'.$row->created_date.'</td>
@@ -166,7 +170,7 @@ $(document).ready(function() {
                                 data-toggle="tooltip"
                                 data-original-title="Send message to user"><a href=""><i class="glyphicon glyphicon-envelope"></i></a></button>
                         <span class="pull-right">
-                            <button  data-original-title="Edit this user" username="'.$row->username.'" user_id="'.$row->user_id.'" type="'.$row->type.'" password="'.$row->password.'" data-toggle="tooltip" type="button" class="btn btn-sm btn-warning edit-user"><i class="glyphicon glyphicon-edit" "></i></button>
+                            <button  data-original-title="Edit this user" username="'.$row->username.'" user_id="'.$row->user_id.'" email = "'.$row->email.'"type="'.$row->type.'" password="'.$row->password.'" data-toggle="tooltip" type="button" class="btn btn-sm btn-warning edit-user"><i class="glyphicon glyphicon-edit" "></i></button>
                              <button type="button" class="btn btn-danger '.$disabled.' delete-user" username="'.$row->username.'" user_id="'.$row->user_id.'">Delete</button>
                         </span>
                     </div>
@@ -217,6 +221,11 @@ $(document).ready(function() {
             <label>Password</label>
             <input class="form-control" type="password" name="password" min-length="8" placeholder="Enter Password" required/>
         </div>
+
+          <div class="form-group">
+            <label>Email</label>
+            <input class="form-control" type="email" name="email" min-length="8" placeholder="Enter Email" required/>
+        </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-sm btn-default" data-dismiss="modal">Close</button>
@@ -249,15 +258,21 @@ $(document).ready(function() {
         </div>
         <div class="form-group">
             <label>Password</label>
-            <input class="form-control password" type="password" name="password" min-length="8" />
+            <input class="form-control " id="password" type="password" name="password" min-length="8" disabled/>
+            <a href="#" class="chg_pass">Change Password</a>
+        </div>
+
+        <div class="form-group">
+            <label>Email</label>
+            <input class="form-control email" type="email" name="email" min-length="8" />
         </div>
 
 		<div class="form-group">
             <label>User Level</label>
-           <select name="type" class="form-control input-lg type">
+           <select name="type" class="form-control type">
 				<option value=""></option>
 				<option value="admin">admin</option>
-				<option value="user">  user  </option>
+				<option value="user">user</option>
 
 			</select>
         </div>
@@ -300,6 +315,14 @@ $(document).ready(function() {
 
 <script type="text/javascript">
 $(document).ready(function(){
+
+    $('.type').select2();
+
+    $('.chg_pass').click(function(){
+            $("#password").prop('disabled', false);
+
+    });
+
     $('.add-user').click(function(){
         $('#form_add_user').resetForm();
         $('#add_user_modal').modal('show');
@@ -309,11 +332,13 @@ $(document).ready(function(){
         username = $(this).attr('username');
 		password = $(this).attr('password');
 		type = $(this).attr('type');
+        email = $(this).attr('email');
 
 
 		$('#USER_ID_EDIT').val(user_id);
         $('.username').val(username);
-		$('.type').val(type);
+        $('.email').val(email);
+        $(".type").select2("val",type);
 		$('.password').val(password);
         $('#edit_user_modal').modal('show');
 		
