@@ -108,8 +108,8 @@ class Manifest_model extends CI_Model {
 		$this->db->insert('manifest_data_table',$data);
 	}
 
-	function data_update($data,$data_id) {
-		$this->db->where('data_id',$data_id);
+	function data_update($data,$hawb_no) {
+		$this->db->where('hawb_no',$hawb_no);
 		$this->db->update('manifest_data_table',$data);
 	}
 
@@ -153,7 +153,9 @@ class Manifest_model extends CI_Model {
 	}
 
 	function get_by_hawb_no($hawb_no){
-		$this->db->where('hawb_no',$hawb_no);
+		$this->db->select('manifest_data_table.*, manifest_file_table.mawb_no');
+		$this->db->where('manifest_data_table.hawb_no',$hawb_no);
+		$this->db->join('manifest_file_table','manifest_file_table.file_id = manifest_data_table.file_id','left');
 		$get = $this->db->get('manifest_data_table');
 		return $get->row();
 	}
@@ -214,9 +216,9 @@ class Manifest_model extends CI_Model {
 		$this->db->where('charge_id',$charge_id);
 		$this->db->delete('manifest_extra_charge_table');
 	}
-	function check_extra_charge($data_id,$type) {
-		$this->db->where('data_id',$data_id);
-		$this->db->where('type',$type);
+	function check_extra_charge($hawb_no,$charge_type) {
+		$this->db->where('hawb_no',$hawb_no);
+		$this->db->where('charge_type',$charge_type);
 		$get = $this->db->get('manifest_extra_charge_table');
 		if($get->num_rows() > 0) return $get->row();
 		else return FALSE;
@@ -227,8 +229,8 @@ class Manifest_model extends CI_Model {
 		return $get->result();
 	}
 	
-	function get_extra_charge($data_id) {
-		$this->db->where('data_id',$data_id);
+	function get_extra_charge($hawb_no) {
+		$this->db->where('hawb_no',$hawb_no);
 		$get = $this->db->get('manifest_extra_charge_table');
 		if($get->num_rows() > 0) return $get->result();
 		else return FALSE;
@@ -526,17 +528,18 @@ class Manifest_model extends CI_Model {
 
     function sub_total($hawb_no,$status = 'normal',$status_discount = 'Approved'){
     	$manifest = $this->get_by_hawb_no($hawb_no);
-    	$extra_charge = $this->manifest_model->get_extra_charge($hawb_no);
+    	$extra_charge = $this->get_extra_charge($hawb_no);
 
-    	$rate = $manifest->nt_kurs;
+    	$rate = $manifest->rate;
+		$total = ($rate * $manifest->kg);
 
     	if($status == 'discount') {
 			if($this->discount->check($manifest->data_id,'rate',array($status_discount)) == false) {
-			    $rate = $value - $this->discount->get_by_data_id($manifest->data_id,'rate',array($status_discount))->discount;
+			    $rate = $rate - $this->discount->get_by_data_id($manifest->data_id,'rate',array($status_discount))->discount;
 			}
 		}
 
-		$kurs = $manifest->nt_kurs;
+		$kurs = $manifest->exchange_rate;
     	if($status == 'discount') {
 			if($this->discount->check($manifest->data_id,'kurs',array($status_discount)) == false) {
 			    $kurs = $kurs - $this->discount->get_by_data_id($manifest->data_id,'kurs',array($status_discount))->discount;
@@ -544,16 +547,14 @@ class Manifest_model extends CI_Model {
 		}
 
 		$extra_total = 0;
-    	if($status == 'discount') {
-			if($extra_charge != false) {
-			    foreach ($extra_charge as $row) {
-			        if($row->currency == 'nt') $rate = $rate + $row->price;
-			        else $extra_total = $extra_total + $row->price; 
-			    }
-			}
+		if($extra_charge) {
+		    foreach ($extra_charge as $row) {
+		        if($row->currency_name == $manifest->currency) $total = $total + $row->currency_value;
+		        else $extra_total = $extra_total + $row->currency_value; 
+		    }
 		}
 
-		$total = ($rate * $manifest->kg);
+		$total = $total + $manifest->other_charge_tata + $manifest->other_charge_tata;
 		$total = $total * $kurs;
 		$total = $total + $extra_total;
 
@@ -563,6 +564,43 @@ class Manifest_model extends CI_Model {
 			}
 		}
 		return $total;
+    }
+
+    function add_new_invoice($inv) {
+    	$this->db->insert('invoice_table',$inv);
+    }
+    function check_available_invoice($hawb_no) {
+    	$get = $this->db->query("select * from invoice_table where hawb_no = '$hawb_no'");
+    	if($get->num_rows() > 0) return $get->result();
+    	else return false;
+    }
+    function create_invoice($hawb_no) {
+    	$data = $this->get_by_hawb_no($hawb_no);
+		$shipper = $this->customers_model->get_by_id($data->shipper);
+		$consignee = $this->customers_model->get_by_id($data->consignee);
+
+		$mapping['hawb_no']			= $hawb_no;
+		$mapping['pkg'] 			= $data->pkg;
+		$mapping['pcs'] 			= $data->pcs;
+		$mapping['value'] 			= $data->value;
+		$mapping['kg']				= $data->kg;
+		$mapping['rate']			= $data->rate;
+		$mapping['currency']		= $data->currency;
+		$mapping['exchange_rate']	= $data->exchange_rate;
+		$mapping['type_payment']	= ($data->prepaid) ? 'prepaid' : 'collect';
+		$mapping['amount']			= ($data->prepaid) ? $data->prepaid : $data->collect;
+		$mapping['shipper_name']	= $shipper->shipper_name;
+		$mapping['shipper_details']	= trim(strtolower($shipper->address." ".$shipper->city." ".$shipper->country . "\nattn: ".$shipper->sort_name." Phone: ".$shipper->phone." Mobile: ".$shipper->mobile));
+		$mapping['consignee_name']	= $consignee->name;
+		$mapping['consignee_details']	= trim(strtolower($consignee->address." ".$consignee->city." ".$consignee->country . "\nattn: ".$consignee->sort_name." Phone: ".$consignee->phone." Mobile: ".$consignee->mobile));
+		$mapping['description']	= $data->description ."\n".$data->remarks;
+		$mapping['created_date']	= date('Y-m-d');
+		$mapping['created_by']	= $this->session->userdata('user_id');
+		$this->add_new_invoice($mapping);
+    }
+    function get_last_invoice($hawb_no) {
+    	$get = $this->db->query("select * from invoice_table where hawb_no='$hawb_no' order by created_date desc limit 1");
+    	return $get->row();
     }
 }
 ?>

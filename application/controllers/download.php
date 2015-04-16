@@ -15,11 +15,17 @@ class Download extends MY_Controller {
 			$this->load->library('pdf');
 			$pdf = $this->pdf->load();
 
-			$data['details'] = $this->manifest_model->print_get($print_id);
-			$data['extra_charge'] = $this->manifest_model->get_extra_charge($data['details']->hawb_no);
+			$hawb_no = $_GET['hawb_no'];
 
-			$this->barcode_qrcode($data['details']->hawb_no);
-			$this->barcode_1d($data['details']->hawb_no);
+			if(!$this->manifest_model->check_available_invoice($hawb_no)){
+				$this->manifest_model->create_invoice($hawb_no);
+			}
+
+			$data['details'] = $this->manifest_model->get_last_invoice($hawb_no);
+			$data['extra_charge'] = $this->manifest_model->get_extra_charge($hawb_no);
+
+			$this->barcode_qrcode($hawb_no);
+			$this->barcode_1d($hawb_no);
 
 			$html = $this->load->view('download/airwaybill',$data,true);
 			$pdf->WriteHTML($html);

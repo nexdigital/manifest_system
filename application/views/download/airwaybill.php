@@ -1,33 +1,32 @@
 <?php
 $manifest = $this->manifest_model->get_by_hawb_no($details->hawb_no);
-$consignee = $this->customers_model->get_by_id($manifest->consignee);
-
 
 #------------------------------------------------------------------------------------------
-$rate = $details->rate;
+$rate = $manifest->rate;
+$total = ($rate * $manifest->kg);
+
 $rate_discount = '';
 if($this->discount->check($manifest->data_id,'rate',array('Approved')) == false) {
-    $rate = $value - $this->discount->get_by_data_id($manifest->data_id,'rate')->discount;
-    $rate_discount = '('.$details->rate.') ';
+    $rate = $rate - $this->discount->get_by_data_id($manifest->data_id,'rate',array('Approved'))->discount;
+    $rate_discount = '('.$manifest->rate.') ';
 }
 
-$kurs = $details->kurs;
+$kurs = $manifest->exchange_rate;
 $kurs_discount = '';
 if($this->discount->check($manifest->data_id,'kurs',array('Approved')) == false) {
-    $kurs = $kurs - $this->discount->get_by_data_id($manifest->data_id,'kurs')->discount;
+    $kurs = $kurs - $this->discount->get_by_data_id($manifest->data_id,'kurs',array('Approved'))->discount;
     $kurs_discount = '('.$details->kurs.') ';
 }
 
 $extra_total = 0;
 if($extra_charge != false) {
     foreach ($extra_charge as $row) {
-        echo '<div class="item">'.ucfirst(strtolower($row->type)).' <em>('.$row->description.')</em></div><div class="value">'.number_format($row->price).'</div>';
-        if($row->currency == 'nt') $rate = $rate + $row->price;
-        else $extra_total = $extra_total + $row->price; 
+        echo '<div class="item">'.ucfirst(strtolower($row->charge_type)).' <em>('.$row->description.')</em></div><div class="value">'.number_format($row->currency_value).'</div>';
+        if($row->currency_name == $manifest->currency) $total = $total + $row->currency_value;
+        else $extra_total = $extra_total + $row->currency_value; 
     }
 }
 
-$total = ($rate * $details->kg);
 $total = $total * $kurs;
 $total = $total + $extra_total;
 #------------------------------------------------------------------------------------------
@@ -57,22 +56,10 @@ $total = $total + $extra_total;
         <div class="content" style="height:20px;">
             <div class="shipment">
                 <div style="border-bottom:1px dotted #000;">
-                <?php 
-                    $details_shipper = explode('<br>', $details->shipper);
-                    $shipper_name = $details_shipper[0];
-                    unset($details_shipper[0]);
-                    $details_shipper = implode('<br>', $details_shipper); 
-                ?>
-                Sender: <?php echo '<em><strong>'.$shipper_name.'</strong></em><br>'.$details_shipper?>
+                Sender: <?php echo '<em><strong>'.$details->shipper_name.'</strong></em><br>'.$details->shipper_details?>
                 </div>
                 <div style="border-bottom:1px dotted #000; margin-top:3px;">
-                <?php 
-                    $details_consignee = explode('<br>', $details->consignee);
-                    $consignee_name = $details_consignee[0];
-                    unset($details_consignee[0]);
-                    $details_consignee = implode('<br>', $details_consignee); 
-                ?>
-                Consignee: <?php echo '<em><strong>'.$consignee_name.'</strong></em><br>'.$details_consignee?>
+                Consignee: <?php echo '<em><strong>'.$details->consignee_name.'</strong></em><br>'.$details->consignee_details?>
                 </div>
                 <div style="margin-top:3px;">
                 Description: <?php echo $details->description; ?><br/>
@@ -127,22 +114,10 @@ $total = $total + $extra_total;
         <div class="content" style="height:20px;">
             <div class="shipment">
                 <div style="border-bottom:1px dotted #000;">
-                <?php 
-                    $details_shipper = explode('<br>', $details->shipper);
-                    $shipper_name = $details_shipper[0];
-                    unset($details_shipper[0]);
-                    $details_shipper = implode('<br>', $details_shipper); 
-                ?>
-                Sender: <?php echo '<em><strong>'.$shipper_name.'</strong></em><br>'.$details_shipper?>
+                Sender: <?php echo '<em><strong>'.$details->shipper_name.'</strong></em><br>'.$details->shipper_details?>
                 </div>
                 <div style="border-bottom:1px dotted #000; margin-top:3px;">
-                <?php 
-                    $details_consignee = explode('<br>', $details->consignee);
-                    $consignee_name = $details_consignee[0];
-                    unset($details_consignee[0]);
-                    $details_consignee = implode('<br>', $details_consignee); 
-                ?>
-                Consignee: <?php echo '<em><strong>'.$consignee_name.'</strong></em><br>'.$details_consignee?>
+                Consignee: <?php echo '<em><strong>'.$details->consignee_name.'</strong></em><br>'.$details->consignee_details?>
                 </div>
                 <div style="margin-top:3px;">
                 Description: <?php echo $details->description; ?><br/>
@@ -197,22 +172,10 @@ $total = $total + $extra_total;
         <div class="content" style="height:20px;">
             <div class="shipment">
                 <div style="border-bottom:1px dotted #000;">
-                <?php 
-                    $details_shipper = explode('<br>', $details->shipper);
-                    $shipper_name = $details_shipper[0];
-                    unset($details_shipper[0]);
-                    $details_shipper = implode('<br>', $details_shipper); 
-                ?>
-                Sender: <?php echo '<em><strong>'.$shipper_name.'</strong></em><br>'.$details_shipper?>
+                Sender: <?php echo '<em><strong>'.$details->shipper_name.'</strong></em><br>'.$details->shipper_details?>
                 </div>
                 <div style="border-bottom:1px dotted #000; margin-top:3px;">
-                <?php 
-                    $details_consignee = explode('<br>', $details->consignee);
-                    $consignee_name = $details_consignee[0];
-                    unset($details_consignee[0]);
-                    $details_consignee = implode('<br>', $details_consignee); 
-                ?>
-                Consignee: <?php echo '<em><strong>'.$consignee_name.'</strong></em><br>'.$details_consignee?>
+                Consignee: <?php echo '<em><strong>'.$details->consignee_name.'</strong></em><br>'.$details->consignee_details?>
                 </div>
                 <div style="margin-top:3px;">
                 Description: <?php echo $details->description; ?><br/>

@@ -1,132 +1,110 @@
 <div id="page-wrapper">
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            Verification Data
-        </div>
-        <div class="row" style="padding:5px;">
-            <div class="col-lg-12">
-                <div class="table-responsive">
-                    <table class="table table-striped table-bordered table-hover">
-                        <thead>
-                            <tr>
-                                <th width="100">Hawb No</th>
-                                <th>Shipper</th>
-                                <th>Consignee</th>
-                                <th width="40">PKG</th>
-                                <th>Description</th>
-                                <th width="40">PCS</th>
-                                <th width="40">KG</th>
-                                <th width="40">Val</th>
-                                <th width="40">PP</th>
-                                <th width="40">CC</th>
-                                <th width="70">Rate</th>
-                                <th width="70">Charge Tata</th>
-                                <th width="70">Charge PML</th>
+    <table id="dataTable" class="table table-striped table-bordered table-hover">
+        <thead>
+            <tr>
+                <th width="100">Hawb No</th>
+                <th>Shipper</th>
+                <th>Consignee</th>
+                <th width="100">Info Details</th>
+                <th width="100">Description</th>
+                <th width="100">Other Charge</th>
+            </tr>
+        </thead>
+        <tbody class="manifest-data-row">
+        <?php
+            if($list_data != false) {
+                $no = 1;
+                foreach ($list_data as $key => $row) {
+                    $check_valid_status = $this->manifest_model->check_valid_status($row->data_id);
+                    switch ($check_valid_status) {
+                        case '0': $status_class = ''; break;
+                        case '1': $status_class = 'warning'; break;
+                        case '2': $status_class = 'success'; break;
+                        default: $status_class = ''; break;
+                    }
+                    echo '
+                    <tr id="' . $row->data_id.'" class="'.$status_class.'">
+                        <td class="hawb_no">'.$row->hawb_no.'</td>
+                    ';
 
-                            </tr>
-                        </thead>
-                        <tbody class="manifest-data-row">
-                        <?php
-                            if($list_data != false) {
-                                $no = 1;
-                                foreach ($list_data as $key => $row) {
-                                    $check_valid_status = $this->manifest_model->check_valid_status($row->data_id);
-                                    switch ($check_valid_status) {
-                                        case '0': $status_class = ''; break;
-                                        case '1': $status_class = 'warning'; break;
-                                        case '2': $status_class = 'success'; break;
-                                        default: $status_class = ''; break;
-                                    }
-                                    echo '
-                                    <tr id="' . $row->data_id.'" class="'.$status_class.'">
-                                        <td class="hawb_no">'.$row->hawb_no.'</td>
-                                    ';
+                    echo '<td class="shipper"><div style="border-bottom:1px solid #ccc; margin:5px 0px;">';
+                    $shipper = $this->customers_model->get_by_id($row->shipper);
+                    if($shipper != FALSE) {                                                
+                        echo '
+                            <strong>'.$shipper->name.'</strong><br/>
+                            '.$shipper->address.'<br/>
+                            '.$shipper->country;
+                    } else {
+                        echo $row->shipper;
+                        $similar = $this->customers_model->check_speeling_address($row->shipper);
+                        echo '</div><div class="btn-group">';
+                        if($similar != FALSE) {
+                            echo '
+                                <button class="btn btn-xs btn-info show-similar" type="button" title="You have '.count($similar).' similar customer(s)" manifest_data_id="'.$row->data_id.'" data_type="shipper">
+                                  Similar <span class="badge">'.count($similar).'</span>
+                                </button>
+                            ';
+                        }
+                        echo '
+                        <button type="button" class="btn btn-xs btn-danger add-customer" title="Add as new customer" manifest_data_id="'.$row->data_id.'" data_type="shipper">
+                            <span class="glyphicon glyphicon-plus"></span>
+                        </button>
+                        </div>';
+                    }
+                    echo '</td>';
 
-                                    echo '<td class="shipper"><div style="border-bottom:1px solid #ccc; margin:5px 0px;">';
-                                    $shipper = $this->customers_model->get_by_id($row->shipper);
-                                    if($shipper != FALSE) {                                                
-                                        echo '
-                                            <strong>'.$shipper->name.'</strong><br/>
-                                            '.$shipper->address.'<br/>
-                                            '.$shipper->country;
-                                    } else {
-                                        echo $row->shipper;
-                                        $similar = $this->customers_model->check_speeling_address($row->shipper);
-                                        echo '</div><div class="btn-group">';
-                                        if($similar != FALSE) {
-                                            echo '
-                                                <button class="btn btn-xs btn-info show-similar" type="button" title="You have '.count($similar).' similar customer(s)" manifest_data_id="'.$row->data_id.'" data_type="shipper">
-                                                  Similar <span class="badge">'.count($similar).'</span>
-                                                </button>
-                                            ';
-                                        }
-                                        echo '
-                                        <button type="button" class="btn btn-xs btn-danger add-customer" title="Add as new customer" manifest_data_id="'.$row->data_id.'" data_type="shipper">
-                                            <span class="glyphicon glyphicon-plus"></span>
-                                        </button>
-                                        </div>';
-                                    }
-                                    echo '</td>';
-
-                                    echo '<td class="consignee"><div style="border-bottom:1px solid #ccc; margin:5px 0px;">';
-                                    $consignee = $this->customers_model->get_by_id($row->consignee);
-                                    if($consignee != FALSE) {                                                
-                                        echo '
-                                            <strong>'.$consignee->name.'</strong><br/>
-                                            '.$consignee->address.'<br/>
-                                            '.$consignee->country;
-                                    } else {
-                                        echo $row->consignee;
-                                        $similar = $this->customers_model->check_speeling_address($row->consignee);
-                                        echo '</div><div class="btn-group">';
-                                        if($similar != FALSE) {
-                                            echo '
-                                                <button class="btn btn-xs btn-info show-similar" type="button" title="You have '.count($similar).' similar customer(s)" manifest_data_id="'.$row->data_id.'" data_type="consignee">
-                                                  Similar <span class="badge">'.count($similar).'</span>
-                                                </button>
-                                            ';
-                                        }
-                                        echo '
-                                            <button class="btn btn-xs btn-danger add-customer" title="Add as new customer" manifest_data_id="'.$row->data_id.'" data_type="consignee">
-                                            <span class="glyphicon glyphicon-plus"></span>
-                                            </button>
-                                        </div>';
-                                    }
-                                    
-                                    echo '
-                                        <td align="center" class="pkg">'.$row->pkg.'</td>
-                                        <td class="description">'.$row->description.'</td>
-                                        <td align="center" class="pcs">'.$row->pcs.'</td>
-                                        <td align="center" class="kg">'.$row->kg.'</td>
-                                        <td align="center" class="value">'.$row->value.'</td>
-                                        <td align="center" class="prepaid">'.$row->prepaid.'</td>
-                                        <td align="center" class="collect">'.$row->collect.'</td>
-                                        <td class="remarks">'.$row->rate.'</td>
-                                        <td class="remarks">'.$row->other_charge_tata.'</td>
-                                        <td class="remarks">'.$row->other_charge_pml.'</td>
-                                    </tr>
-                                    ';
-                                    $no++;
-                                }
-                            } else {
-                                echo '
-                                <tr>
-                                    <td colspan="13" align="center">No found data</td>
-                                </tr>
-                                ';
-                            }
-                        ?>
-                    </tbody>
-                </table>
-                <!--<form id="form_verification" method="post" action="<?=site_url('manifest/ajax/verification')?>">
-                <input type="hidden" name="FILE_ID" value="<?=$file->file_id?>">
-                <div class="btn-group">
-                    <button type="submit" class="btn btn-sm btn-primary">Save Verification</button>
-                </div>-->
-                </form>
-            </div>
-        </div>
-    </div>
+                    echo '<td class="consignee"><div style="border-bottom:1px solid #ccc; margin:5px 0px;">';
+                    $consignee = $this->customers_model->get_by_id($row->consignee);
+                    if($consignee != FALSE) {                                                
+                        echo '
+                            <strong>'.$consignee->name.'</strong><br/>
+                            '.$consignee->address.'<br/>
+                            '.$consignee->country;
+                    } else {
+                        echo $row->consignee;
+                        $similar = $this->customers_model->check_speeling_address($row->consignee);
+                        echo '</div><div class="btn-group">';
+                        if($similar != FALSE) {
+                            echo '
+                                <button class="btn btn-xs btn-info show-similar" type="button" title="You have '.count($similar).' similar customer(s)" manifest_data_id="'.$row->data_id.'" data_type="consignee">
+                                  Similar <span class="badge">'.count($similar).'</span>
+                                </button>
+                            ';
+                        }
+                        echo '
+                            <button class="btn btn-xs btn-danger add-customer" title="Add as new customer" manifest_data_id="'.$row->data_id.'" data_type="consignee">
+                            <span class="glyphicon glyphicon-plus"></span>
+                            </button>
+                        </div>';
+                    }
+                    
+                    echo '
+                        <td align="left">
+                            CC: '.$row->collect.'<br/>
+                            PP: '.$row->prepaid.'<br/>
+                            PKG: '.$row->pkg.'<br/>
+                            PCS: '.$row->pcs.'<br/>
+                            VALUE: '.$row->value.'<br/>
+                        </td>
+                        <td class="description">'.$row->description.'</td>
+                        <td>
+                            TATA: '.$row->other_charge_tata.'<br/>
+                            PML: '.$row->other_charge_pml.'
+                        </td>
+                    </tr>
+                    ';
+                    $no++;
+                }
+            } else {
+                echo '
+                <tr>
+                    <td colspan="13" align="center">No found data</td>
+                </tr>
+                ';
+            }
+        ?>
+    </tbody>
+    </table>
 </div>
 
 <div class="modal fade" id="modal_add_customer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -241,7 +219,7 @@
             <h4 class="modal-title">Select Similar Customer</h4>
           </div>
           <div class="modal-body">
-            <table class="table table-hover">
+            <table id="dataSimilarCustomer" class="table table-hover">
                 <thead>
                     <tr>
                         <th>Name</th>
@@ -266,8 +244,6 @@
 
 <script type="text/javascript">
 $(document).ready(function(){
-    $('.country, .tax_class').select2();
-
     $('button.add-customer').click(function(){
         data_id = $(this).attr('manifest_data_id');
         data_type = $(this).attr('data_type');
@@ -309,6 +285,7 @@ $(document).ready(function(){
         })
 
         $('#modal_similar_customer').modal('show');
+        $('table#dataSimilarCustomer').dataTable();
     })
 
     $('.select-similar-customer').live('click',function(){

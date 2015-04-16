@@ -1,4 +1,3 @@
-<!-- Navigation -->
 <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
     <div class="navbar-header">
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -7,34 +6,27 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="<?=site_url()?>">Manifest System <?php if(isset($title)) echo '- ' . $title; else echo '' ; ?></a>
+        <a class="navbar-brand" href="<?=site_url()?>">THS 27 <?php if(isset($title)) echo '- ' . $title; else echo '' ; ?></a>
     </div>
-    <!-- /.navbar-header -->
 
     <div class="navbar-default sidebar" role="navigation">
         <div class="sidebar-nav navbar-collapse">
             <ul class="nav" id="side-menu">              
                 <li>
-                    <a href="#"><i class="glyphicon glyphicon-upload"></i>  Manifest<span class="fa arrow"></span></a>
+                    <a href="#">Manifest<span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
                         <li><a href="<?= site_url()?>manifest/upload">Upload</a></li>
                         <li><a href="<?=site_url()?>manifest/data">Data</a>
-                        <ul class="nav nav-second-level">
-
-                             <ul class="nav nav-third-level">
+	                        <ul class="nav  nav-third-level">
                                  <li><a href="<?=site_url()?>manifest/data">All Data </a></li>
                                  <li><a href="<?= site_url()?>manifest/sby_data">Bu Acu</a></li>
-                             </ul>
-
-                        </uL>
-
-
-                        </li>
-                        <li><a href="<?=site_url()?>manifest/verification">
-                            <span class="badge pull-right"><?=$this->manifest_model->count_not_verified()?></span>
-                            Verification
-                        </a></li>
-                        <li><a href="<?=site_url()?>manifest/download">Download Data</a></li>
+	                        </uL>
+	                    </li>
+	                    <li><a href="<?=site_url()?>manifest/verification">
+	                            <span class="badge pull-right"><?=$this->manifest_model->count_not_verified()?></span>
+	                            Verification
+	                    </a></li>
+	                    <li><a href="<?=site_url()?>manifest/download">Download Data</a></li>
                     </ul>
                 </li>
                 <li>
@@ -82,6 +74,15 @@
                     <ul class="nav nav-second-level">
                         <li><a href="<?= site_url('administrator/manage_user')?>">Manage User</a></li>
                         <li><a href="<?= site_url('administrator/setting')?>">Setting</a></li>
+
+                        <li>
+                        	<a href="<?= site_url('administrator/master')?>">All Master</a>
+                             <ul class="nav nav-third-level">
+                                 <li><a href="<?=site_url()?>administrator/master/menu">Manu Navigation</a></li>
+                                 <li><a href="<?=site_url()?>administrator/master/currency">Currency</a></li>
+                             </ul>
+                        </li>
+
                         <li><a href="<?= site_url('access_logs')?>">Access Logs</a></li>
                     </ul>
                 </li>

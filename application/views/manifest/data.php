@@ -3,10 +3,11 @@
         <thead>
             <tr>
                 <th width="50px">Select</th>
-                <th>Mawb No</th>
-                <th>Hawb No</th>
+                <th width="110px">Mawb No</th>
+                <th width="110px">Hawb No</th>
                 <th>Shipper</th>
                 <th>Consignee</th>
+                <th width="110px">Status</th>
             </tr>
         </thead>
         <tbody>
@@ -27,13 +28,14 @@
                 <tr>
                     <td align="center" valign="middle">
                         <button type="button" class="btn btn-primary btn-xs show-details" hawb_no="'.$row->hawb_no.'">
-                            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                            <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
                         </button>
                     </td>
                     <td align="left" valign="middle">'.$row->mawb_no.'</td>
                     <td align="left" valign="middle">'.$row->hawb_no.'</td>
                     <td align="justify">'.$shipper.'</td>
                     <td align="justify">'.$consignee.'</td>
+                    <td align="justify">'.$row->status_delivery.'</td>
                 </tr>
                 ';
             }
@@ -50,9 +52,9 @@ $(document).ready(function(){
         $.colorbox({
             iframe:true,
             href:'<?=base_url()?>manifest/modal/details?hawb_no='+hawb_no,
-            width:'900',
+            width:'1100',
             height:'600',
-            overlayClose:true,
+            overlayClose:false,
             scrolling:true
         })
     })

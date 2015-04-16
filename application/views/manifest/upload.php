@@ -8,223 +8,238 @@
 </style>
 
 <div id="page-wrapper">
-    <div class="row">
-        <ul class="nav nav-tabs" role="tablist" id="request_tab">
-          <li role="presentation" class="active"><a href="#tab-import" role="tab" data-toggle="tab">Import</a></li>
-          <li role="presentation"><a href="#tab-export" role="tab" data-toggle="tab">Single Item</a></li>
-        </ul>
-        <div class="tab-content">
-            <div role="tabpanel" class="tab-pane fade active in" id="tab-import">
-                <form id="form_upload_manifest" method="post" action="<?=site_url('manifest/ajax/upload')?>">
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label>Mawb No</label>
-                            <input class="form-control" name="mawb_no" required>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label>Consign To</label>
-                            <input class="form-control" name="consign_to" required>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label>Flight No</label>
-                            <input class="form-control" name="flight_no" required>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label>Gross Weight</label>
-                            <input class="form-control" name="gross_weight" required>
-                        </div>
-                    </div>
-                    <div class="col-lg-12">
-                        <div class="form-group">
-                            <label>Partner</label>
-                            <select class="form-control flight_from" name="partner_id" required>
-                                <?php
-                                    if($partner_list) {
-                                        foreach ($partner_list as $row) {
-                                            echo '<option value="'.$row->partner_id.'">'.$row->company_name.'</option>';
-                                        }
-                                    }
-                                ?>          
-                            </select>
-                            <?php if($partner_list==false) echo '<label class="error" for="flight_from">Please add first the partner.</label>'; ?>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label>From</label>
-                            <select class="form-control flight_from" name="flight_from" required>
-                                <?php
-                                    foreach ($this->customers_model->list_country() as $key => $value) {
-                                        $selected = (strtolower($value) == 'indonesia') ? 'selected' : '';
-                                        echo '<option value="'.$value.'" '.$selected.'>'.$value.'</option>';
-                                    }
-                                ?>          
-                            </select>                                     
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label>To</label>
-                            <select class="form-control flight_to" name="flight_to" required>
-                                <?php
-                                    foreach ($this->customers_model->list_country() as $key => $value) {
-                                        $selected = (strtolower($value) == 'indonesia') ? 'selected' : '';
-                                        echo '<option value="'.$value.'" '.$selected.'>'.$value.'</option>';
-                                    }
-                                ?>
-                            </select>                                  
-                        </div>
-                    </div>
-                    <div class="col-lg-12">
-                        <div class="form-group">
-                            <input id="fileupload" type="file" name="userfile" required>
-                        </div>
-                        <input type="hidden" name="manifest_type" value="import">
-                        <button type="submit" class="btn btn-success btn-sm submit-upload">Upload</button>
+    <ul class="nav nav-tabs" role="tablist" id="request_tab">
+      <li role="presentation" class="active"><a href="#tab-import" role="tab" data-toggle="tab">Import</a></li>
+      <li role="presentation"><a href="#tab-export" role="tab" data-toggle="tab">Single Item</a></li>
+    </ul>
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane fade active in" id="tab-import">
+            <form id="form_upload_manifest" method="post" action="<?=site_url('manifest/ajax/upload')?>">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label>Mawb No</label>
+                        <input class="form-control" name="mawb_no" required>
                     </div>
                 </div>
-                </form>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label>Consign To</label>
+                        <input class="form-control" name="consign_to" required>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label>Flight No</label>
+                        <input class="form-control" name="flight_no" required>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label>Gross Weight</label>
+                        <input class="form-control" name="gross_weight" required>
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <div class="form-group">
+                        <label>Partner</label>
+                        <select class="form-control flight_from" name="partner_id" required>
+                            <?php
+                                if($partner_list) {
+                                    foreach ($partner_list as $row) {
+                                        echo '<option value="'.$row->partner_id.'">'.$row->company_name.'</option>';
+                                    }
+                                }
+                            ?>          
+                        </select>
+                        <?php if($partner_list==false) echo '<label class="error" for="flight_from">Please add first the partner.</label>'; ?>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label>From</label>
+                        <select class="form-control flight_from" name="flight_from" required>
+                            <?php
+                                foreach ($this->customers_model->list_country() as $key => $value) {
+                                    $selected = (strtolower($value) == 'indonesia') ? 'selected' : '';
+                                    echo '<option value="'.$value.'" '.$selected.'>'.$value.'</option>';
+                                }
+                            ?>          
+                        </select>                                     
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label>To</label>
+                        <select class="form-control flight_to" name="flight_to" required>
+                            <?php
+                                foreach ($this->customers_model->list_country() as $key => $value) {
+                                    $selected = (strtolower($value) == 'indonesia') ? 'selected' : '';
+                                    echo '<option value="'.$value.'" '.$selected.'>'.$value.'</option>';
+                                }
+                            ?>
+                        </select>                                  
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <div class="form-group">
+                        <input id="fileupload" type="file" name="userfile" required>
+                    </div>
+                    <input type="hidden" name="manifest_type" value="import">
+                    <button type="submit" class="btn btn-success btn-sm submit-upload">Upload</button>
+                </div>
             </div>
+            </form>
+        </div>
 
-            <div role="tabpane1" class="tab-pane fade in" id="tab-export">
-                <form method="post" action="<?=base_url()?>manifest/ajax/insert" id="form_upload_manifest_single">
-                <div class="row">
-                    <div class="col-lg-12" style="padding:0px;">
-                        <div class="col-sm-6">
+        <div role="tabpane1" class="tab-pane fade in" id="tab-export">
+            <form method="post" action="<?=base_url()?>manifest/ajax/insert" id="form_upload_manifest_single">
+            <div class="row">
+                <div class="col-lg-12" style="padding:0px;">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Upload Type</label>
+                            <select class="form-control upload_type" name="manifest_type" required>
+                                <option value="">Select</option>
+                                <option value="import">Import</option>
+                                <option value="export">Export</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label>Hawb No</label>
+                            <input class="form-control hawb_no" type="text" name="hawb_no" id="hawb_no_field" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-12" style="padding:0px;">
+                    <div class="col-lg-6" style="padding:0px;">
+                        <div class="col-sm-2">
                             <div class="form-group">
-                                <label>Upload Type</label>
-                                <select class="form-control upload_type" name="manifest_type" required>
-                                    <option value="import">Import</option>
-                                    <option value="export">Export</option>
-                                    <option value="other">Other</option>
-                                </select>
+                                <label>Pkg</label>
+                                <input class="form-control text-pkg" type="text" name="pkg" required>
                             </div>
                         </div>
-                        <div class="col-lg-6">
+                        <div class="col-sm-2">
                             <div class="form-group">
-                                <label>Hawb No</label>
-                                <input class="form-control" type="text" name="hawb_no" required>
+                                <label>Pcs</label>
+                                <input class="form-control text-pcs" type="text" name="pcs" required>
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <div class="form-group">
+                                <label>Value</label>
+                                <input class="form-control text-value" type="text" name="value" required>
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <div class="form-group">
+                                <label>KG</label>
+                                <input class="form-control text-kg" type="text" name="kg" required>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label>Rate/KG</label>
+                                <input class="form-control text-rate" type="text" name="rate" required>
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-12" style="padding:0px;">
-	                    <div class="col-lg-6" style="padding:0px;">
-	                        <div class="col-sm-2">
-	                            <div class="form-group">
-	                                <label>Pkg</label>
-	                                <input class="form-control text-pkg" type="text" name="pkg" required>
-	                            </div>
-	                        </div>
-                            <div class="col-sm-2">
-                                <div class="form-group">
-                                    <label>Pcs</label>
-                                    <input class="form-control text-pcs" type="text" name="pcs" required>
-                                </div>
-                            </div>
-                            <div class="col-sm-2">
-                                <div class="form-group">
-                                    <label>Value</label>
-                                    <input class="form-control text-value" type="text" name="value" required>
-                                </div>
-                            </div>
-	                        <div class="col-sm-3">
-	                            <div class="form-group">
-	                                <label>KG</label>
-	                                <input class="form-control text-kg" type="text" name="kg" required>
-	                            </div>
-	                        </div>
-	                        <div class="col-sm-3">
-	                            <div class="form-group">
-	                                <label>Rate</label>
-	                                <input class="form-control text-rate" type="text" name="rate" required>
-	                            </div>
-	                        </div>
-	                    </div>
-	                   	<div class="col-lg-6" style="padding:0px;">
-                            <div class="col-sm-4">
+                   	<div class="col-lg-6" style="padding:0px;">
+                        <div class="col-sm-3">
+                            <div class="form-group">
                                 <div class="form-group">
                                     <label>Currency</label>
-                                    <select class="form-control" id="select-payment" name="currency" required>
-                                        <option value="nt">NT</option>
-                                        <option value="usd">USD</option>
-                                        <option value="id">IDR</option>
+                                    <select class="form-control select-currency" name="currency" required>
+                                        <option value="">Select</option>
+                                        <?php
+                                            foreach($list_currency as $row) {
+                                                echo '<option value="'.$row->currency_name.'" currency_value="'.$row->currency_name.'">'.$row->currency_name.'</option>';
+                                            }
+                                        ?>
                                     </select>
                                 </div>
                             </div>
-	                   		<div class="col-sm-4">
-	                            <div class="form-group">
-	                                <label>Select Payment</label>
-	                                <select class="form-control" id="select-payment" name="type_payment" required>
-		                                <option value="">Select</option>
-		                                <option value="prepaid">Prepaid</option>
-		                                <option value="collect">Collect</option>
-	                                </select>
-	                            </div>
-	                        </div>
-	                        <div class="col-sm-4">
-	                            <div class="form-group">
-	                                <label>Amount</label>
-	                                <input class="form-control text-amount" type="text" disabled="disabled" required>
-	                                <input class="form-control text-amount" type="hidden" name="amount" required>
-	                            </div>
-	                        </div>
-	                    </div>
-	                </div>
-                    <div class="col-sm-12" style="padding:0px;">
-                        <div class="col-sm-6">
+                        </div>
+                        <div class="col-sm-3">
                             <div class="form-group">
-                                <label>Shipper</label>
-                                <p class="selected-shipper-text"></p>
-                                <input type="hidden" name="shipper" class="selected-shipper" required>
-                                <button type="button" class="btn btn-default btn-xs submit-upload select-customer" data_type="shipper">Select shipper</button>
+                                <label>Exchange Rate</label>
+                                <input class="form-control text-exchange-rate" type="text" name="exchange_rate" readonly required>
                             </div>
                         </div>
-                        <div class="col-sm-6">
+                   		<div class="col-sm-3">
                             <div class="form-group">
-                                <label>Consignee</label>
-                                <p class="selected-consignee-text"></p>
-                                <input type="hidden" name="consignee" class="selected-consignee" required>
-                                <button type="button" class="btn btn-default btn-xs submit-upload select-customer" data_type="consignee">Select consignee</button>
+                                <label>Type Payment</label>
+                                <select class="form-control" id="select-payment" name="type_payment" required>
+	                                <option value="">Select</option>
+	                                <option value="prepaid">Prepaid</option>
+	                                <option value="collect">Collect</option>
+                                </select>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label>Description</label>
-                            <textarea class="form-control" rows="2" name="description" style="resize:none;"></textarea>
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <label>Amount</label>
+                                <input class="form-control text-amount" type="text" name="amount" readonly required>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label>Remarks</label>
-                            <textarea class="form-control" rows="2" name="remarks" style="resize:none;"></textarea>
-                        </div>
-                    </div>
-                    <div class="col-sm-3">
-                        <div class="form-group">
-                            <label>Other Charge Tata</label>
-                            <input class="form-control" type="text" name="other_charge_tata">
-                        </div>
-                    </div>
-                    <div class="col-sm-3">
-                        <div class="form-group">
-                            <label>Other Charge PML</label>
-                            <input class="form-control" type="text" name="other_charge_pml">
-                        </div>
-                    </div>
-                    <div class="col-lg-12">
-                        <button type="submit" class="btn btn-success btn-sm submit-upload-other">Save</button>
                     </div>
                 </div>
-                </form>
+                <div class="col-sm-12" style="padding:0px;">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Shipper</label>
+                            <p class="selected-shipper-text"></p>
+                            <input type="hidden" name="shipper" class="selected-shipper" required>
+                            <button type="button" class="btn btn-default btn-xs submit-upload select-customer" data_type="shipper">Select shipper</button>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Consignee</label>
+                            <p class="selected-consignee-text"></p>
+                            <input type="hidden" name="consignee" class="selected-consignee" required>
+                            <button type="button" class="btn btn-default btn-xs submit-upload select-customer" data_type="consignee">Select consignee</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea class="form-control" rows="2" name="description" style="resize:none;"></textarea>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Remarks</label>
+                        <textarea class="form-control" rows="2" name="remarks" style="resize:none;"></textarea>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label>Other Charge Tata</label>
+                        <input class="form-control text-charge-tata" type="text" name="other_charge_tata">
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label>Other Charge PML</label>
+                        <input class="form-control text-charge-pml" type="text" name="other_charge_pml">
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Subtotal</label>
+                        <p class="form-control text-right text-subtotal" style="font-weight:bold; font-style:italic; background-color:#ccc;"></p>
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <button type="submit" class="btn btn-success btn-sm submit-upload-other">Save</button>
+                </div>
             </div>
+            </form>
         </div>
     </div>
 </div>
@@ -273,35 +288,9 @@
 
 <script type="text/javascript">
 $(document).ready(function(){
-    $('#form_upload_manifest, #form_upload_manifest_other').resetForm();
-    $('select.form-control, .upload_type, .flight_from, .flight_to').select2();
-	
-    $('.text-pkg, .text-kg, .text-rate').blur(function(){
-        var pkg = $('input.text-pkg').val();
-        var kg = $('input.text-kg').val();
-        var rate = $('input.text-rate').val();
+    $('#form_upload_manifest, #form_upload_manifest_single').resetForm();	
 
-        var type = $('select#select-payment').val();
 
-        $.post('<?=base_url()?>manifest/formula/subtotal',{'pkg':pkg,'kg':kg,'rate':rate},function(data){
-            $('.text-amount, .text-amount').val(data);
-        })
-    })
-    $('select#select-payment').change(function(){
-    	var pkg = $('input.text-pkg').val();
-    	var kg = $('input.text-kg').val();
-    	var rate = $('input.text-rate').val();
-
-    	var type = $(this).val();
-
-        if(type) {
-    		$.post('<?=base_url()?>manifest/formula/subtotal',{'pkg':pkg,'kg':kg,'rate':rate},function(data){
-    			$('.text-amount, .text-amount').val(data);
-    		})
-        } else {
-            $('.text-amount, .text-amount').val(0);            
-        }
-	})
 	$('#form_upload_manifest').validate();
     $('#form_upload_manifest').ajaxForm({
         beforeSubmit: function() {
@@ -334,6 +323,39 @@ $(document).ready(function(){
         }
     })
     
+    $('#form_upload_manifest_single .upload_type').change(function(){
+        var type = $(this).val();
+        switch(type) {
+            case 'import':
+                document.getElementById("hawb_no_field").readOnly = false;
+                $('#form_upload_manifest_single .hawb_no').val('').focus();
+                break;
+            default:
+                document.getElementById("hawb_no_field").readOnly = true;
+                $.get('<?php echo base_url() ?>manifest/ajax/get_new_hawbno',function(data){                
+                    $('#form_upload_manifest_single .hawb_no').val(data);
+                })
+                break;
+        }
+    })
+
+    $('#form_upload_manifest_single .select-currency').change(function(){
+        var currency_name = $(this).val();
+        if(currency_name.length > 0) {
+            $.post('<?php echo base_url()?>api/get_currency_value',{'currency_name':currency_name,'currency_type':'kurs transaction'},function(data){
+                $('input.text-exchange-rate').val(data);
+                $('p.text-subtotal').html(data);
+            })
+        } else {
+            $('input.text-exchange-rate').val('');            
+            $('p.text-subtotal').html('');
+        }
+    })
+
+    $('#form_upload_manifest_single input, #form_upload_manifest_single select, #form_upload_manifest_single textarea').blur(function(){
+        calc_subtotal();
+    })
+
     $('#form_upload_manifest_single').validate();
     $('#form_upload_manifest_single').ajaxForm({
         dataType:'json',
@@ -404,5 +426,20 @@ function search_customer(t) {
         $('.result-search-customer').html('');
         $('.text-search-customer').html('');
     }
+}
+
+function calc_subtotal(){
+    var pkg         = $('input.text-pkg').val();
+    var kg          = $('input.text-kg').val();
+    var rate        = $('input.text-rate').val();
+    var kurs        = $('input.text-exchange-rate').val();
+    var charge_tata = $('input.text-charge-tata').val();
+    var charge_pml  = $('input.text-charge-pml').val();
+
+    $.post('<?=base_url()?>manifest/formula/subtotal',{'pkg':pkg,'kg':kg,'rate':rate,'kurs':kurs,'charge_tata':charge_tata,'charge_pml':charge_pml},function(data){
+        data = JSON.parse(data);
+        $('.text-amount').val(number_format(data.amount));
+        $('p.text-subtotal').html('IDR ' + number_format(data.subtotal));
+    })
 }
 </script>

@@ -16,6 +16,7 @@ class Manifest extends MY_Controller {
 		if($this->session->userdata('login') != TRUE) redirect(base_url());
 		$data = array(
 			'partner_list' 	=> $this->partner_model->get_partner_list(),
+			'list_currency'	=> $this->master->get_list_currency('Kurs Transaction'),
 			'title'		 	=> 'Upload Manifest'
 			);
 		$this->set_layout('manifest/upload',$data);
@@ -236,7 +237,7 @@ class Manifest extends MY_Controller {
 												$mapping[$no]['rate'] 				= (!in_array($header['rate'].$key, $merge_cell)) ? $value[$header['rate']] : $sheetData[$this->system->get_cell_key($header['rate'].$key,$merge_cell)][$header['rate']];
 												$mapping[$no]['remarks'] 			= (!in_array($header['remarks'].$key, $merge_cell)) ? $value[$header['remarks']] : $sheetData[$this->system->get_cell_key($header['remarks'].$key,$merge_cell)][$header['remarks']];
 												$mapping[$no]['status']				= 'Unverified';
-												$mapping[$no]['nt_kurs']			= $this->tools->get_nt_kurs();
+												$mapping[$no]['exchange_rate']  	= $this->master->get_currency_value('NT','kurs Transaction');
 												$mapping[$no]['created_date']		= date('Y-m-d h:i:s');
 												$mapping[$no]['last_update']		= date('Y-m-d h:i:s');
 												$mapping[$no]['user_id']			= $this->session->userdata('user_id');
@@ -246,7 +247,7 @@ class Manifest extends MY_Controller {
                                                   $s_payment = "Paid";
                                                 }
 												$mapping[$no]['status_payment']		= $s_payment;
-												$mapping[$no]['status_delivery']	= 'Arrived in Jakarta';
+												$mapping[$no]['status_delivery']	= 'New data';
 												$mapping[$no]['other_charge_tata']	= (!in_array($header['other_charge_tata'].$key, $merge_cell)) ? $value[$header['other_charge_tata']] : $sheetData[$this->system->get_cell_key($header['other_charge_tata'].$key,$merge_cell)][$header['other_charge_tata']];
 												$mapping[$no]['other_charge_pml']	= (!in_array($header['other_charge_pml'].$key, $merge_cell)) ? $value[$header['other_charge_pml']] : $sheetData[$this->system->get_cell_key($header['other_charge_pml'].$key,$merge_cell)][$header['other_charge_pml']];
 												$mapping[$no]['mawb_type']			= ($mawb_type && strlen($mawb_type) > 0 && in_array($mawb_type, $mawb_type_list)) ? $mawb_type : 'ftz';
@@ -303,12 +304,12 @@ class Manifest extends MY_Controller {
 				$mapping['pcs'] 			= $_POST['pcs'];
 				$mapping['kg']				= $this->tools->rounded($_POST['kg']);
 				$mapping['value'] 			= $_POST['value'];
-				$mapping['prepaid']			= ($_POST['type_payment'] == 'prepaid') ? $_POST['amount'] : null;
-				$mapping['collect']			= ($_POST['type_payment'] == 'collect') ? $_POST['amount'] : null;
+				$mapping['prepaid']			= ($_POST['type_payment'] == 'prepaid') ? str_ireplace(',', '', $_POST['amount']) : null;
+				$mapping['collect']			= ($_POST['type_payment'] == 'collect') ? str_ireplace(',', '', $_POST['amount']) : null;
 				$mapping['rate']			= $_POST['rate'];
 				$mapping['remarks'] 		= $_POST['remarks'];
-				$mapping['status']			= 'VALID';
-				$mapping['nt_kurs']			= $this->tools->get_nt_kurs();
+				$mapping['status']			= 'valid';
+				$mapping['exchange_rate']	= $_POST['exchange_rate'];
 				$mapping['created_date']	= date('Y-m-d h:i:s');
 				$mapping['last_update']		= date('Y-m-d h:i:s');
 				$mapping['user_id']			= $this->session->userdata('user_id');
@@ -320,6 +321,7 @@ class Manifest extends MY_Controller {
 				$mapping['rand_data_id']		= $rand_data_id;
 				$mapping['manifest_type']		= $_POST['manifest_type'];
 				$mapping['currency']			= $_POST['currency'];
+				$mapping['status_delivery']		= 'New data';
 				$this->manifest_model->data_insert_new($mapping);
 				$this->system->set_activity('Insert Single Data #'.$mapping['hawb_no']);
 				echo json_encode(array('status' => 'success'));
@@ -328,20 +330,41 @@ class Manifest extends MY_Controller {
 			}
 			break;
 		case 'update':
-			$data_id = $_POST['data_id'];
-			$mapping['hawb_no'] 		= $_POST['hawb_no'];
+			$hawb_no 					= $_POST['hawb_no'];
 			$mapping['pkg'] 			= $_POST['pkg'];
 			$mapping['description'] 	= $_POST['description'];
 			$mapping['remarks']		 	= $_POST['remarks'];
 			$mapping['pcs'] 			= $_POST['pcs'];
 			$mapping['kg']				= $_POST['kg'];
 			$mapping['value'] 			= $_POST['value'];
-			$mapping['prepaid']			= $_POST['prepaid'];
-			$mapping['collect']			= $_POST['collect'];
+			$mapping['prepaid']			= ($_POST['type_payment'] == 'prepaid') ? str_ireplace(',', '', $_POST['amount']) : null;
+			$mapping['collect']			= ($_POST['type_payment'] == 'collect') ? str_ireplace(',', '', $_POST['amount']) : null;
 			$mapping['rate']			= $_POST['rate'];
-			$mapping['other_charge_tata'] 	= $_POST['other_charge_tata'];
-			$mapping['other_charge_pml'] 	= $_POST['other_charge_pml'];
-			$this->manifest_model->data_update($mapping,$data_id);
+			$mapping['other_charge_tata'] 	= $_POST['charge_tata'];
+			$mapping['other_charge_pml'] 	= $_POST['charge_pml'];
+			$this->manifest_model->data_update($mapping,$hawb_no);
+			echo json_encode(array('hawb_no' => $hawb_no));
+			break;
+
+		case 'update_invoice':
+			$mapping['hawb_no']			= $_POST['hawb_no'];
+			$mapping['pkg'] 			= $_POST['pkg'];
+			$mapping['pcs'] 			= $_POST['pcs'];
+			$mapping['value'] 			= $_POST['value'];
+			$mapping['kg']				= $_POST['kg'];
+			$mapping['rate']			= $_POST['rate'];
+			$mapping['currency']	= $_POST['currency'];
+			$mapping['exchange_rate']	= $_POST['exchange_rate'];
+			$mapping['type_payment']	= $_POST['type_payment'];
+			$mapping['amount']	= $_POST['amount'];
+			$mapping['shipper_name']	= $_POST['shipper_name'];
+			$mapping['shipper_details']	= $_POST['shipper_details'];
+			$mapping['consignee_name']	= $_POST['shipper_name'];
+			$mapping['consignee_details']	= $_POST['consignee_details'];
+			$mapping['description']	= $_POST['description'];
+			$mapping['created_date']	= date('Y-m-d');
+			$mapping['created_by']	= $this->session->userdata('user_id');
+			$this->manifest_model->add_new_invoice($mapping);
 			echo json_encode(array('hawb_no' => $mapping['hawb_no']));
 			break;
 
@@ -427,20 +450,20 @@ class Manifest extends MY_Controller {
 			$type = $_GET['type'];
 			switch ($type) {
 				case 'add':
-					$charge['data_id'] 		= $_POST['data_id'];
-					$charge['type']		 	= $_POST['type_charge'];
-					$charge['description'] 	= $_POST['description'];
-					$charge['currency']		= $_POST['type_currency'];
-					$charge['price'] 		= $_POST['price'];
-					$charge['created_date'] = date('Y-m-d h:i:s');
-					$charge['user_id'] 		= $this->session->userdata('user_id');
-					$charge['sync_debit'] 	= (isset($_POST['sync_debit'])) ? 'true' : 'false';
+					$charge['hawb_no'] 				= $_GET['hawb_no'];
+					$charge['charge_type']		 	= $_POST['charge_type'];
+					$charge['description'] 			= $_POST['description'];
+					$charge['currency_name']		= $_POST['currency_name'];
+					$charge['currency_value'] 		= $_POST['currency_value'];
+					$charge['created_date'] 		= date('Y-m-d');
+					$charge['user_id'] 				= $this->session->userdata('user_id');
+					$charge['sync_debit'] 			= (isset($_POST['sync_debit'])) ? 'true' : 'false';
 
-					if($this->manifest_model->check_extra_charge($charge['data_id'],$charge['type']) == false) {
+					if($this->manifest_model->check_extra_charge($charge['hawb_no'],$charge['charge_type']) == false) {
 						$this->manifest_model->add_extra_charge($charge);
-						$data = $this->manifest_model->get_by_data_id($charge['data_id']);
-						$this->system->set_activity('Add extra charge '.$charge['type'].' for #'.$data->hawb_no);
-						echo json_encode(array('status' => 'true','message' => ''));
+						$data = $this->manifest_model->get_by_hawb_no($charge['hawb_no']);
+						$this->system->set_activity('Add extra charge '.$charge['charge_type'].' for #'.$data->hawb_no);
+						echo json_encode(array('status' => 'true','message' => 'Charge has been add to manifest #'.$data->hawb_no));
 					} else {
 						echo json_encode(array('status' => 'false','message' => 'Type charge has been added!'));		
 					}					
@@ -468,6 +491,29 @@ class Manifest extends MY_Controller {
 				echo 'Added';
 			}
 			break;
+	
+		case 'get_new_hawbno':
+
+			#GET TOTAL TRANSACTION TODAY
+			$get = $this->db->query("select count(data_id) as total_transaction from manifest_data_table where created_date = '2015-04-14' and lower(manifest_type) != 'import'");
+			$total_transaction = $get->row('total_transaction');
+			$total_transaction += 1;
+
+			$new_hawb_no = 'T' . date('ymd');
+			switch (strlen($total_transaction)) {
+				case 1:
+					$new_hawb_no = $new_hawb_no . '00' . $total_transaction;
+					break;
+				case 2:
+					$new_hawb_no = $new_hawb_no . '0' . $total_transaction;
+					break;	
+				default:
+					$new_hawb_no = $new_hawb_no . $total_transaction;
+					break;
+			}
+			echo $new_hawb_no;
+			break;
+
 			default:
 				# code...
 				break;
@@ -480,7 +526,7 @@ class Manifest extends MY_Controller {
 				$hawb_no = $_GET['hawb_no'];
 
 				$data['data'] = $this->manifest_model->get_by_hawb_no($hawb_no);
-				$data['extra_charge'] = $this->manifest_model->get_extra_charge($data['data']->data_id);
+				$data['extra_charge'] = $this->manifest_model->get_extra_charge($hawb_no);
 				$this->set_modal('manifest/details',$data);
 				break;
 			
@@ -491,11 +537,18 @@ class Manifest extends MY_Controller {
 				$this->set_modal('manifest/edit',$data);
 				break;
 
+			case 'edit_invoice':
+				$hawb_no = $_GET['hawb_no'];
+
+				$data = $this->manifest_model->get_by_hawb_no($hawb_no);
+				$this->set_modal('manifest/print_priview',array('data' => $data));
+				break;
+
 			case 'extra_charge':
 				$hawb_no = $_GET['hawb_no'];
 
 				$data['data'] = $this->manifest_model->get_by_hawb_no($hawb_no);
-				$data['extra_charge'] = $this->manifest_model->get_extra_charge($data['data']->data_id);
+				$data['extra_charge'] = $this->manifest_model->get_extra_charge($hawb_no);
 				$this->set_modal('manifest/extra_charge',$data);
 				break;
 			default:
@@ -556,13 +609,19 @@ class Manifest extends MY_Controller {
 		if(count($_POST) > 0) {
 			switch ($method) {
 				case 'subtotal':
-					$pkg 	= $_POST['pkg'];
-					$kg 	= $_POST['kg'];
-					$rate 	= $_POST['rate'];
-					$kurs 	= $this->tools->get_nt_kurs();
+					$pkg 	= str_ireplace(',', '.', $_POST['pkg']);
+					$kg 	= str_ireplace(',', '.', $_POST['kg']);
+					$rate 	= str_ireplace(',', '.', $_POST['rate']);
+					$kurs 	= $_POST['kurs'];
+					$charge_tata = (isset($_POST['charge_tata'])) ? $_POST['charge_tata'] : 0;
+					$charge_pml = (isset($_POST['charge_pml'])) ? $_POST['charge_pml'] : 0;
 
-					$total 	= $kg * $rate;	
-					echo $total * $kurs;
+					$total 	= $kg * $rate;
+					$amount = $total;
+					$subtotal  = $total + $charge_tata + $charge_pml;
+					$subtotal  = $subtotal * $kurs;
+
+					echo json_encode(array('amount' => $amount, 'subtotal' => $subtotal));
 					break;
 				
 				default:
