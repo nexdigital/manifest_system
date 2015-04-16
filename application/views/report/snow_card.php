@@ -15,7 +15,7 @@
                                 <div class="form-group">
                                 <label>Select Date</label>
                                  <div class="input-append date form_datetime2">
-                                    <input size="16" type="text" value="" class="form-control" readonly="">
+                                  <input size="16" type="text" value="" name="date" class="form-control" readonly="">
                                     <span class="add-on"><i class="icon-th"></i></span>
                               </div>
                                 </div>
