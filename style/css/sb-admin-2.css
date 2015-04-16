@@ -393,3 +393,33 @@ table.dataTable thead .sorting:after {
 /*#page-wrapper {
     padding:20px 30px;
 }*/
+
+div.list-group-item {
+    padding:0px;
+    margin:5px 4px 10px 4px;
+}
+div.list-group-item table {
+    width:100%;
+}
+div.list-group-item table tbody {
+    width: 100%;
+    padding: 0px;
+    margin: 0px;
+}
+div.list-group-item table tbody tr {
+    border-bottom:1px solid #ccc;
+    height: 30px;
+    line-height: 30px;
+}
+div.list-group-item table tbody tr td {
+    line-height: 30px;
+    width: 50%;
+    padding:0px 5px;
+}
+div.list-group-item table tbody tr td:first-child {
+    font-weight: bold;
+    
+}
+div.list-group-item table tbody tr td:last-child {
+    text-align: left;
+}
